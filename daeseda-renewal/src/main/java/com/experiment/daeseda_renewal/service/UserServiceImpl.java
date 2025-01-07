@@ -1,6 +1,7 @@
 package com.experiment.daeseda_renewal.service;
 
 import com.experiment.daeseda_renewal.dto.UserDTO;
+import com.experiment.daeseda_renewal.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/logo.png">
+    <link rel="stylesheet" href="../../static/css/member/save.css">
+    <link rel="stylesheet" href="/css/member/save.css">
+    <script src="https://kit.fontawesome.com/08edd7b20e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/js/font.js" defer>
+    <script src="../../static/js/member/save.js" defer></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/member/save.js" defer></script>
+    <title>회원가입</title>
+</head>
+
+<body>
+<form class="save-form-wrapper" action="/member/save" method="post">
+    <!-- 이름, 닉네임, 전화번호 -->
+    <article class="save-article first-article">
+        <h3 class="save-title">회원가입</h3>
+        <nav class="save-nav">
+            <div class="step now"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+        </nav>
+        <div class="input-wrapper">
+            <i class="fa-regular fa-user icon name-icon"></i>
+            <input type="text" placeholder="이름" class="input name-input" name="memberName">
+            <p class="wrong-form-message name-wrong hidden">이름은 2자 이상입니다.</p>
+        </div>
+        <div class="input-wrapper">
+            <i class="fa-regular fa-user icon nickname-icon"></i>
+            <input type="text" placeholder="닉네임" class="input nickname-input" name="memberNickname">
+            <p class="wrong-form-message nickname-wrong hidden">닉네임은 필수입니다.</p>
+        </div>
+        <div class="input-wrapper">
+            <i class="fa-solid fa-phone icon phone-icon"></i>
+            <input type="text" placeholder="전화번호(-없이)" class="input phone-input" name="memberPhone">
+            <p class="wrong-form-message phone-wrong hidden">전화번호 양식이 잘못되었습니다. ex)01012345678</p>
+        </div>
+        <button type="button" class="next-button first-article-next-button" disabled>다음</button>
+        <p class="login-return-button">이미 회원이신가요? <a href="/member/login" class="login-return-tag">로그인으로 돌아가기</a></p>
+    </article>
+    <!-- 주소 -->
+    <article class="save-article second-article hidden">
+        <h3 class="save-title">회원가입</h3>
+        <nav class="save-nav">
+            <div class="step"></div>
+            <div class="step now"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+        </nav>
+        <div class="input-wrapper">
+            <div class="address-input-wrapper">
+                <input type="text" class="zipcode" id="postcode"> <!-- 우편번호 들어가는 곳-->
+                <button type="button" class="address-search-button" onclick="DaumPostcode()">우편번호 검색</button>
+            </div>
+            <input type="text" name="" readonly class="first-address address-input" id="address" placeholder="기본주소">
+            <!-- 서울시 노원구 인덕아파트, 우편번호 검색 시 자동으로 입력되므로 readonly-->
+            <input type="text" class="last-address address-input" id="detailAddress" placeholder="상세주소"> <!-- 101동 101호-->
+            <p class="wrong-form-message address-wrong">주소는 필수입니다.</p>
+            <input type="hidden" name="memberAddress" id="memberAddressHidden">
+        </div>
+        <button type="button" class="next-button second-article-next-button" onclick="checkInputs()" disabled>다음</button>
+        <p class="login-return-button">이미 회원이신가요? <a href="/member/login">로그인으로 돌아가기</a></p>
+    </article>
+
+    <!-- 이메일, 인증번호 -->
+    <article class="save-article third-article hidden">
+        <h3 class="save-title">회원가입</h3>
+        <nav class="save-nav">
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step now"></div>
+            <div class="step"></div>
+        </nav>
+        <div class="input-wrapper">
+            <div class="email-input-wrapper">
+                <i class="fa-solid fa-envelope icon email-icon"></i>
+                <input type="email" placeholder="이메일" class="input email-input" name="memberEmail">
+                <button type="button" class="certification-start-button">전송</button>
+            </div>
+            <div class="certification-input-wrapper">
+                <i class="fa-solid fa-question icon certification-icon"></i>
+                <input type="text" name="certification" placeholder="인증번호" class="input certification-number">
+                <button type="button" class="certification-button">인증번호 확인</button>
+                <p class="wrong-form-message email-certification-wrong">이메일 인증을 진행하세요.</p>
+            </div>
+        </div>
+        <button type="button" class="next-button third-article-next-button" disabled>다음</button>
+        <p class="login-return-button">이미 회원이신가요? <a href="/member/login">로그인으로 돌아가기</a></p>
+    </article>
+
+    <!-- 비밀번호, 비밀번호 확인 -->
+    <article class="save-article fourth-article hidden">
+        <h3 class="save-title">회원가입</h3>
+        <nav class="save-nav">
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step now"></div>
+        </nav>
+        <div class="input-wrapper">
+            <div class="password-input-wrapper">
+                <i class="fa-solid fa-key password-icon"></i>
+                <input type="password" name="memberPassword" placeholder="비밀번호" class="password-input">
+                <i class="fa-solid fa-eye-slash password-toggle-button"></i>
+            </div>
+
+            <div class="repassword-input-wrapper">
+                <i class="fa-solid fa-key repassword-icon"></i>
+                <input type="password" name="" placeholder="비밀번호 재입력" class="repassword-input">
+                <i class="fa-solid fa-eye-slash repassword-toggle-button"></i>
+                <p class="wrong-form-message password-wrong hidden ">비밀번호가 영문자, 숫자가 포함된 6자 이상이지 않습니다.</p>
+                <p class="wrong-form-message password-match-wrong hidden">비밀번호가 일치하지 않습니다.</p>
+            </div>
+        </div>
+        <button type="submit" class="next-button submit-button" disabled>가입하기</button>
+        <p class="login-return-button">이미 회원이신가요? <a href="/member/login">로그인으로 돌아가기</a></p>
+    </article>
+</form>
+</body>
+
+</html>

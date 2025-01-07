@@ -10,8 +10,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     @GetMapping("/signup")
-    public String signup() {
+    public String signupForm() {
         return "signup";
+    }
+
+    @PostMapping("/signup")
+    public String signup() {
+        return "index";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login() {
+        return "index";
     }
 
     @PostMapping("/logout")
