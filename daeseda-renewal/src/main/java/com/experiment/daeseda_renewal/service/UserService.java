@@ -4,6 +4,6 @@ import com.experiment.daeseda_renewal.dto.UserDTO;
 
 public interface UserService {
 
-    int signUp(UserDTO userDTO);
-    int signOut();
+    void signUp(UserDTO userDTO);
+    void signOut();
 }

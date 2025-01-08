@@ -10,17 +10,17 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserDTO {
 
-    private String userEmail;
-    private String userName;
-    private String userPassword;
+    private String email;
+    private String name;
+    private String password;
 
     public static UserDTO fromUser(User user) {
         if(user == null)
             return null;
 
         return UserDTO.builder()
-                .userEmail(user.getEmail())
-                .userName(user.getName())
+                .email(user.getEmail())
+                .name(user.getName())
                 .build();
     }
 }
