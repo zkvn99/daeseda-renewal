@@ -6,4 +6,5 @@ public interface UserService {
 
     void signUp(UserDTO userDTO);
     void signOut();
+    UserDTO login(UserDTO userDTO);
 }

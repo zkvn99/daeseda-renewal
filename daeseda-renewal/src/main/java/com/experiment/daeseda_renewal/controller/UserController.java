@@ -2,6 +2,7 @@ package com.experiment.daeseda_renewal.controller;
 
 import com.experiment.daeseda_renewal.dto.UserDTO;
 import com.experiment.daeseda_renewal.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +32,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login() {
-        return "index";
+    public String login(@ModelAttribute UserDTO userDTO, HttpSession session) {
+        UserDTO loginResult = userService.login(userDTO);
+        if (loginResult != null) {
+            session.setAttribute("email", loginResult.getEmail());
+            session.setAttribute("name", loginResult.getName());
+            return "redirect:/";
+        } else {
+            return "/user/login";
+        }
     }
 
     @PostMapping("/logout")

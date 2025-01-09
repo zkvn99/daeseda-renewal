@@ -27,4 +27,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public void signOut() {
     }
+
+    @Override
+    public UserDTO login(UserDTO userDTO) {
+        System.out.println(userDTO.getEmail());
+        User user = userRepository.findByEmail(userDTO.getEmail());
+        if(user == null) {
+            return null;
+        } else {
+            if(user.getPassword().equals(userDTO.getPassword())) {
+                return UserDTO.fromUser(user);
+            } else {
+                return null;
+            }
+        }
+    }
 }
