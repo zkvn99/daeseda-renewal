@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비밀번호 찾기</title>
+</head>
+
+<body>
+  <form action="/find-pw" method="post">
+    <h3>비밀번호 찾기</h3>
+    <div class="page-button-wrapper">
+      <a href="/find-id" class="page-button other-page">아이디 찾기</a>
+      <a href="/find-pw" class="page-button now-page">비밀번호 찾기</a>
+    </div>
+    <div class="email-input-box-wrapper">
+      <input type="email" name="email" id="email" placeholder="이메일을 입력하세요" class="email-input input-box">
+    </div>
+    <p class="result-message find-button" th:classappend="${password != null ? '' : ' hidden'}">
+      <span th:text="${password}"></span>
+    </p>
+    <button type="submit" class="find-button">비밀번호 찾기</button>
+  </form>
+</body>
+
+</html>

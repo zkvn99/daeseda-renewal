@@ -14,13 +14,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void signUp(UserDTO userDTO) {
-
         User user = User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
                 .build();
-
          userRepository.save(user);
     }
 
@@ -30,7 +28,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTO login(UserDTO userDTO) {
-        System.out.println(userDTO.getEmail());
         User user = userRepository.findByEmail(userDTO.getEmail());
         if(user == null) {
             return null;
@@ -40,6 +37,26 @@ public class UserServiceImpl implements UserService{
             } else {
                 return null;
             }
+        }
+    }
+
+    @Override
+    public String findEmailByName(String name) {
+        User user = userRepository.findByName(name);
+        if(user == null) {
+            return null;
+        } else {
+            return user.getEmail();
+        }
+    }
+
+    @Override
+    public String findPasswordByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if(user == null) {
+            return null;
+        } else {
+            return user.getPassword();
         }
     }
 }

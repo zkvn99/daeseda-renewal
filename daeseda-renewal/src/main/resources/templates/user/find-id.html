@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이디 찾기</title>
+</head>
+
+<body>
+  <form action="/find-id" method="post">
+    <h3>아이디 찾기</h3>
+    <div class="page-button-wrapper">
+      <a href="find-id" class="page-button now-page">아이디 찾기</a>
+      <a href="/find-pw" class="page-button other-page">비밀번호 찾기</a>
+    </div>
+    <div class="input-box-wrapper">
+      <div class="name-input-wrapper">
+        <i class="fa-regular fa-user input-icon name-icon"></i>
+        <input type="text" name="name" placeholder="이름" class="input-box name-input">
+      </div>
+      <p class="result-message find-button" th:classappend="${email != null ? '' : ' hidden'}">
+        <span th:text="${email}"></span>
+      </p>
+    </div>
+    <button type="submit" class="find-button">아이디 찾기</button>
+  </form>
+</body>
+
+</html>
