@@ -1,7 +1,7 @@
 package com.experiment.daeseda_renewal.controller;
 
 import com.experiment.daeseda_renewal.dto.UserDTO;
-import com.experiment.daeseda_renewal.service.UserService;
+import com.experiment.daeseda_renewal.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

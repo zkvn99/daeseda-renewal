@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.service;
+package com.experiment.daeseda_renewal.service.user;
 
 import com.experiment.daeseda_renewal.dto.UserDTO;
 import com.experiment.daeseda_renewal.entity.User;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 

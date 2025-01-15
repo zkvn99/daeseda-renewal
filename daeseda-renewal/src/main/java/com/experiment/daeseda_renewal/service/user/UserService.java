@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.service;
+package com.experiment.daeseda_renewal.service.user;
 
 import com.experiment.daeseda_renewal.dto.UserDTO;
 
