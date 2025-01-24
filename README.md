@@ -1,3 +1,3 @@
 # daeseda-renewal
 daeseda-renewal
-대세다 고도화
+대세다 리뉴얼 및 고도화
