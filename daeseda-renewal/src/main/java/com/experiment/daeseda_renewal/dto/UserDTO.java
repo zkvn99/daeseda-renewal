@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDTO {
 
+    private Long id;
     private String email;
     private String name;
     private String password;
@@ -20,6 +21,7 @@ public class UserDTO {
             return null;
 
         return UserDTO.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .build();
