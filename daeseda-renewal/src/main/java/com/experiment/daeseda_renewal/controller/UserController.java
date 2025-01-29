@@ -35,6 +35,7 @@ public class UserController {
     public String login(@ModelAttribute UserDto userDTO, HttpSession session) {
         UserDto loginResult = userService.login(userDTO);
         if (loginResult != null) {
+            session.setAttribute("userId", loginResult.getId());
             session.setAttribute("email", loginResult.getEmail());
             session.setAttribute("name", loginResult.getName());
             return "redirect:/";

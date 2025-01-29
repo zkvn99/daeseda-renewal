@@ -1,18 +1,12 @@
 package com.experiment.daeseda_renewal.controller;
 
-import com.experiment.daeseda_renewal.dto.CartItemDto;
 import com.experiment.daeseda_renewal.service.cart.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/cart")
@@ -22,16 +16,20 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/add")
-    public String addToCart(@RequestParam Long productId, @RequestParam int quantity, HttpSession session) {
+    public String addToCart(@RequestParam Long productId, @RequestParam int quantity,
+                            HttpSession session, RedirectAttributes redirectAttributes) {
         Long userId = (Long) session.getAttribute("userId");
         cartService.addToCart(userId, productId, quantity);
-        return "redirect:/cart/view";
+
+        redirectAttributes.addFlashAttribute("message", "상품이 장바구니에 추가되었습니다!");
+
+        return "redirect:/products/list";
     }
 
-    @GetMapping("/view")
+    @GetMapping("/list")
     public String viewCart(Model model, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         model.addAttribute("cartItems", cartService.getCartItems(userId));
-        return "cart/view";
+        return "cart/list";
     }
 }
