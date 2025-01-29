@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>주문 완료</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>주문이 완료되었습니다!</h1>
+
+<div th:if="${order}">
+    <p><strong>주문번호:</strong> <span th:text="${order.orderId}"></span></p>
+    <p><strong>주문일자:</strong> <span th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+
+    <h2>주문 상품</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>수량</th>
+            <th>총 가격</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.orderItems}">
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.totalPrice} + '원'"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a href="/">메인 화면으로</a>
+</body>
+</html>
