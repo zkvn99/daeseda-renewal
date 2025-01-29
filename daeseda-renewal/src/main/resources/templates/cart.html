@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>장바구니</title>
+    <script>
+        function placeOrder() {
+            fetch('/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = "/product";
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+<h1>장바구니</h1>
+<ul>
+    <li th:each="item : ${cartItems}">
+        <span th:text="${item.name}"></span> -
+        <span th:text="${item.price}"></span> 원
+        <span th:text="${item.quantity}"></span> 개
+    </li>
+</ul>
+<button onclick="placeOrder()">주문하기</button>
+</body>
+</html>

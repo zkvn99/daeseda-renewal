@@ -17,6 +17,8 @@
 
   <a th:if="${session.email != null}" href="/users/logout">로그아웃</a>
   <a th:if="${session.email != null}" href="/users/my-page">마이페이지</a>
+  <a th:if="${session.email != null}" href="/cart">장바구니</a>
+  <a th:if="${session.email != null}" href="/product">상품목록</a>
 </body>
 
 </html>

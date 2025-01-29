@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>상품 목록</title>
+  <script>
+    function addToCart(productId, productName, productPrice) {
+      fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          productId: productId,
+          name: productName,
+          price: productPrice
+        })
+      }).then(response => response.json())
+              .then(data => alert(data.message))
+              .catch(error => console.error('Error:', error));
+    }
+  </script>
+</head>
+<body>
+<h1>상품 목록</h1>
+<ul>
+  <li th:each="product : ${products}">
+    <span th:text="${product.name}"></span> -
+    <span th:text="${product.price}"></span> 원
+    <button th:attr="onclick='addToCart(' + ${product.id} + ', \'' + ${product.name} + '\', ' + ${product.price} + ')'">
+      장바구니 추가
+    </button>
+  </li>
+</ul>
+<a href="/cart">장바구니 보기</a>
+</body>
+</html>

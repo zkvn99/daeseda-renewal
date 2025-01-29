@@ -1,6 +1,6 @@
 package com.experiment.daeseda_renewal.service.user;
 
-import com.experiment.daeseda_renewal.dto.UserDTO;
+import com.experiment.daeseda_renewal.dto.UserDto;
 import com.experiment.daeseda_renewal.entity.User;
 import com.experiment.daeseda_renewal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public void signUp(UserDTO userDTO) {
+    public void signUp(UserDto userDTO) {
         User user = User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
@@ -27,13 +27,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO login(UserDTO userDTO) {
+    public UserDto login(UserDto userDTO) {
         User user = userRepository.findByEmail(userDTO.getEmail());
         if(user == null) {
             return null;
         } else {
             if(user.getPassword().equals(userDTO.getPassword())) {
-                return UserDTO.fromUser(user);
+                return UserDto.fromUser(user);
             } else {
                 return null;
             }

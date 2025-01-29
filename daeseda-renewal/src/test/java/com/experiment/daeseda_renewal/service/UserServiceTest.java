@@ -1,6 +1,6 @@
 package com.experiment.daeseda_renewal.service;
 
-import com.experiment.daeseda_renewal.dto.UserDTO;
+import com.experiment.daeseda_renewal.dto.UserDto;
 import com.experiment.daeseda_renewal.entity.User;
 import com.experiment.daeseda_renewal.repository.UserRepository;
 import com.experiment.daeseda_renewal.service.user.UserService;
@@ -19,7 +19,7 @@ public class UserServiceTest {
     @Test
     void testSignup() {
         // given
-        UserDTO userDTO = UserDTO.builder()
+        UserDto userDTO = UserDto.builder()
                 .email("email@email.com")
                 .name("name")
                 .password("password")

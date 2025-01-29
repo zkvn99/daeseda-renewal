@@ -1,12 +1,12 @@
 package com.experiment.daeseda_renewal.service.user;
 
-import com.experiment.daeseda_renewal.dto.UserDTO;
+import com.experiment.daeseda_renewal.dto.UserDto;
 
 public interface UserService {
 
-    void signUp(UserDTO userDTO);
+    void signUp(UserDto userDTO);
     void signOut();
-    UserDTO login(UserDTO userDTO);
+    UserDto login(UserDto userDTO);
     String findEmailByName(String name);
     String findPasswordByEmail(String email);
 }

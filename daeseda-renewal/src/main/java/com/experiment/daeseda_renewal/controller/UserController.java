@@ -1,6 +1,6 @@
 package com.experiment.daeseda_renewal.controller;
 
-import com.experiment.daeseda_renewal.dto.UserDTO;
+import com.experiment.daeseda_renewal.dto.UserDto;
 import com.experiment.daeseda_renewal.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@ModelAttribute UserDTO userDTO) {
+    public String signup(@ModelAttribute UserDto userDTO) {
         userService.signUp(userDTO);
         return "index";
     }
@@ -32,8 +32,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserDTO userDTO, HttpSession session) {
-        UserDTO loginResult = userService.login(userDTO);
+    public String login(@ModelAttribute UserDto userDTO, HttpSession session) {
+        UserDto loginResult = userService.login(userDTO);
         if (loginResult != null) {
             session.setAttribute("email", loginResult.getEmail());
             session.setAttribute("name", loginResult.getName());
