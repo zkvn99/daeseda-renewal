@@ -7,11 +7,42 @@
     <link rel="icon" href="/images/logo.png">
     <script src="https://kit.fontawesome.com/08edd7b20e.js" crossorigin="anonymous"></script>
     <title>회원가입</title>
+    <script>
+        async function checkDuplicateEmail() {
+            const emailInput = document.querySelector(".email-input");
+            const email = emailInput.value;
+            const message = document.querySelector(".email-message");
+
+            if (!email) {
+                message.textContent = "이메일을 입력해주세요.";
+                message.style.color = "red";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/users/check-email?email=${email}`);
+                const result = await response.json();
+
+                if (result.duplicate) {
+                    message.textContent = "이미 사용 중인 이메일입니다.";
+                    message.style.color = "red";
+                } else {
+                    message.textContent = "사용 가능한 이메일입니다.";
+                    message.style.color = "green";
+                }
+            } catch (error) {
+                console.error("Error checking email:", error);
+                message.textContent = "오류 발생. 다시 시도해주세요.";
+                message.style.color = "red";
+            }
+        }
+    </script>
 </head>
 
 <body>
 <form action="/users/signup" method="post" class="signup-form">
     <h3 class="signup-title">회원가입</h3>
+    <p th:if="${status}" style="color:red;" th:text="${status}"></p>
 
     <!-- 이름 -->
     <div class="input-wrapper">
@@ -23,6 +54,8 @@
     <div class="input-wrapper">
         <i class="fa-solid fa-envelope icon email-icon"></i>
         <input type="email" placeholder="이메일" name="email" required class="input email-input">
+        <button type="button" onclick="checkDuplicateEmail()" class="check-duplicate-button">중복 확인</button>
+        <p class="email-message"></p>
     </div>
 
     <!-- 비밀번호 -->
