@@ -1,9 +1,11 @@
 package com.experiment.daeseda_renewal.service.user;
 
+import com.experiment.daeseda_renewal.constant.SignupStatus;
 import com.experiment.daeseda_renewal.dto.UserDto;
 import com.experiment.daeseda_renewal.entity.User;
 import com.experiment.daeseda_renewal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,15 +13,26 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void signUp(UserDto userDTO) {
+    public SignupStatus signUp(UserDto userDTO) {
+
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            return  SignupStatus.EMAIL_ALREADY_EXISTS;
+        }
+
         User user = User.builder()
-                .name(userDTO.getName())
-                .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
-                .build();
-         userRepository.save(user);
+                    .name(userDTO.getName())
+                    .email(userDTO.getEmail())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
+                    .build();
+        try {
+            userRepository.save(user);
+            return SignupStatus.SUCCESS;
+        } catch (Exception e) {
+            return SignupStatus.FAIL;
+        }
     }
 
     @Override
@@ -32,7 +45,7 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             return null;
         } else {
-            if(user.getPassword().equals(userDTO.getPassword())) {
+            if(passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
                 return UserDto.fromUser(user);
             } else {
                 return null;
@@ -51,12 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String findPasswordByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if(user == null) {
-            return null;
-        } else {
-            return user.getPassword();
-        }
+    public boolean isEmailDuplicate(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

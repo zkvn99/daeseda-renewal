@@ -1,5 +1,6 @@
 package com.experiment.daeseda_renewal.controller;
 
+import com.experiment.daeseda_renewal.constant.SignupStatus;
 import com.experiment.daeseda_renewal.dto.UserDto;
 import com.experiment.daeseda_renewal.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -21,9 +22,16 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@ModelAttribute UserDto userDTO) {
-        userService.signUp(userDTO);
-        return "index";
+    public String signup(@ModelAttribute UserDto userDTO, Model model) {
+        SignupStatus status = userService.signUp(userDTO);
+
+        model.addAttribute("status", status.getMessage());
+
+        if (status == SignupStatus.SUCCESS) {
+            return "redirect:/";
+        } else {
+            return "/user/signup";
+        }
     }
 
     @GetMapping("/login")
@@ -81,9 +89,8 @@ public class UserController {
 
     @PostMapping("/find-pw")
     public String findPassword(@RequestParam("email") String email, Model model) {
-        String password = userService.findPasswordByEmail(email);
-        if (password != null) {
-            model.addAttribute("password", "비밀번호: " + password);
+        if (userService.isEmailDuplicate(email)) {
+            model.addAttribute("password", "비밀번호 재설정");
         } else {
             model.addAttribute("password", "이메일에 해당하는 계정을 찾을 수 없습니다.");
         }
