@@ -5,6 +5,10 @@ daeseda-renewal
 Java 17
 Spring 3.4.1
 
+데이터베이스
+PostgreSQL
+Redis
+
 대신 세탁해드립니다 리뉴얼
 
 목표
