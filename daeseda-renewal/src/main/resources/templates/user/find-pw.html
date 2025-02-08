@@ -5,10 +5,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>비밀번호 찾기</title>
+  <script>
+    async function mailAuthentication() {
+      const emailInput = document.querySelector(".email-input");
+      const email = emailInput.value;
+      const message = document.querySelector(".email-message");
+
+      if (!email) {
+        message.textContent = "이메일을 입력해주세요.";
+        message.style.color = "red";
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/users/check-email?email=${email}`);
+        const result = await response.json();
+
+        if (result.duplicate) {
+          message.textContent = "이미 사용 중인 이메일입니다.";
+          message.style.color = "red";
+        } else {
+          message.textContent = "사용 가능한 이메일입니다.";
+          message.style.color = "green";
+        }
+      } catch (error) {
+        console.error("Error checking email:", error);
+        message.textContent = "오류 발생. 다시 시도해주세요.";
+        message.style.color = "red";
+      }
+    }
+  </script>
 </head>
 
 <body>
-  <form action="/users/find-pw" method="post">
+  <form action="/users/password-reset" method="post">
     <h3>비밀번호 찾기</h3>
     <div class="page-button-wrapper">
       <a href="/users/find-id" class="page-button other-page">아이디 찾기</a>
@@ -16,11 +46,15 @@
     </div>
     <div class="email-input-box-wrapper">
       <input type="email" name="email" id="email" placeholder="이메일을 입력하세요" class="email-input input-box">
+      <button type="button" onclick="mailAuthentication()" class="check-duplicate-button">이메일 인증</button>
+
+      <p class="email-message"></p>
     </div>
-    <p class="result-message find-button" th:classappend="${password != null ? '' : ' hidden'}">
-      <span th:text="${password}"></span>
-    </p>
-    <button type="submit" class="find-button">비밀번호 찾기</button>
+    <div class="password-input-box-wrapper">
+      <input type="password" name="password" id="password" placeholder="패스워드를 입력하세요" class="password-input input-box">
+      <p class="password-massage"></p>
+    </div>
+    <button type="submit" class="find-button">비밀번호 변경</button>
   </form>
 </body>
 
