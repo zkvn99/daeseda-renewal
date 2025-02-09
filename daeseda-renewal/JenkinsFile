@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    environment {
+        COMPOSE_FILE = 'docker-compose.yml'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/zkvn99/daeseda-renewal.git'
+            }
+        }
+
+        stage('Build & Deploy') {
+            steps {
+                sh 'docker-compose down'
+                sh 'docker-compose up -d --build'
+            }
+        }
+    }
+}
