@@ -2,6 +2,7 @@ package com.experiment.daeseda_renewal.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,13 +21,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .requestMatchers("/**").permitAll() // 로그인 없이 접근 가능한 경로
-                .anyRequest().authenticated() // 나머지 요청은 인증 필요
-                .and()
-                .formLogin().disable() // 기본 로그인 페이지 비활성화
-                .csrf().disable(); // CSRF 보호 비활성화 (필요시)
-
+                .authorizeHttpRequests(auth -> auth // ✅ 새로운 방식
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults()) // 기본 인증 방식
+                .csrf(csrf -> csrf.disable()); // ✅ Lambda DSL로 CSRF 비활성화
         return http.build();  // HttpSecurity 설정을 반환
     }
 }
