@@ -1,5 +1,6 @@
-package com.experiment.daeseda_renewal.entity;
+package com.experiment.daeseda_renewal.domain.Cart;
 
+import com.experiment.daeseda_renewal.domain.Product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

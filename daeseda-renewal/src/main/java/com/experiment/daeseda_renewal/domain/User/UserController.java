@@ -1,8 +1,6 @@
-package com.experiment.daeseda_renewal.controller;
+package com.experiment.daeseda_renewal.domain.User;
 
 import com.experiment.daeseda_renewal.constant.SignupStatus;
-import com.experiment.daeseda_renewal.dto.UserDto;
-import com.experiment.daeseda_renewal.service.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

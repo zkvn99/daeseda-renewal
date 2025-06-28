@@ -1,12 +1,10 @@
-package com.experiment.daeseda_renewal.service.cart;
+package com.experiment.daeseda_renewal.domain.Cart;
 
-import com.experiment.daeseda_renewal.dto.CartItemDto;
-import com.experiment.daeseda_renewal.entity.CartItem;
-import com.experiment.daeseda_renewal.entity.Product;
-import com.experiment.daeseda_renewal.repository.CartItemRepository;
-import com.experiment.daeseda_renewal.repository.ProductRepository;
+import com.experiment.daeseda_renewal.domain.Product.Product;
+import com.experiment.daeseda_renewal.domain.Product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

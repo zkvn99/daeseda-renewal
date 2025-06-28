@@ -1,7 +1,7 @@
-package com.experiment.daeseda_renewal.controller.rest;
+package com.experiment.daeseda_renewal.domain.User.rest;
 
+import com.experiment.daeseda_renewal.domain.User.UserService;
 import com.experiment.daeseda_renewal.service.mail.MailService;
-import com.experiment.daeseda_renewal.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;

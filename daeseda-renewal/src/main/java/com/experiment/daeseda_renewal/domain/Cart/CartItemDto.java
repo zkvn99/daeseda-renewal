@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.dto;
+package com.experiment.daeseda_renewal.domain.Cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

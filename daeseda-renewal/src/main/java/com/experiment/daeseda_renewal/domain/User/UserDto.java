@@ -1,6 +1,5 @@
-package com.experiment.daeseda_renewal.dto;
+package com.experiment.daeseda_renewal.domain.User;
 
-import com.experiment.daeseda_renewal.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

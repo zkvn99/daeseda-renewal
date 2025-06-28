@@ -1,7 +1,5 @@
-package com.experiment.daeseda_renewal.controller;
+package com.experiment.daeseda_renewal.domain.Product;
 
-import com.experiment.daeseda_renewal.entity.Product;
-import com.experiment.daeseda_renewal.service.product.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

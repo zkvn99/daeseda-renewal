@@ -1,14 +1,8 @@
-package com.experiment.daeseda_renewal.service.order;
+package com.experiment.daeseda_renewal.domain.Order;
 
-import com.experiment.daeseda_renewal.dto.CartItemDto;
-import com.experiment.daeseda_renewal.dto.OrderDto;
-import com.experiment.daeseda_renewal.dto.OrderItemDto;
-import com.experiment.daeseda_renewal.entity.Order;
-import com.experiment.daeseda_renewal.entity.OrderItem;
-import com.experiment.daeseda_renewal.entity.Product;
-import com.experiment.daeseda_renewal.repository.OrderItemRepository;
-import com.experiment.daeseda_renewal.repository.OrderRepository;
-import com.experiment.daeseda_renewal.service.cart.CartService;
+import com.experiment.daeseda_renewal.domain.Cart.CartItemDto;
+import com.experiment.daeseda_renewal.domain.Cart.CartService;
+import com.experiment.daeseda_renewal.domain.Product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

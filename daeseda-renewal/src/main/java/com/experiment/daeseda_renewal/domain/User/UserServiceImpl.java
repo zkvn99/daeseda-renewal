@@ -1,9 +1,6 @@
-package com.experiment.daeseda_renewal.service.user;
+package com.experiment.daeseda_renewal.domain.User;
 
 import com.experiment.daeseda_renewal.constant.SignupStatus;
-import com.experiment.daeseda_renewal.dto.UserDto;
-import com.experiment.daeseda_renewal.entity.User;
-import com.experiment.daeseda_renewal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

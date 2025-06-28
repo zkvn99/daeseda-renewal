@@ -1,6 +1,4 @@
-package com.experiment.daeseda_renewal.service.product;
-
-import com.experiment.daeseda_renewal.entity.Product;
+package com.experiment.daeseda_renewal.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.List;

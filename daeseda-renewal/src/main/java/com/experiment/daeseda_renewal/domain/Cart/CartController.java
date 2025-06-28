@@ -1,6 +1,5 @@
-package com.experiment.daeseda_renewal.controller;
+package com.experiment.daeseda_renewal.domain.Cart;
 
-import com.experiment.daeseda_renewal.service.cart.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

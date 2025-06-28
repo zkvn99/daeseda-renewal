@@ -1,6 +1,5 @@
-package com.experiment.daeseda_renewal.repository;
+package com.experiment.daeseda_renewal.domain.Cart;
 
-import com.experiment.daeseda_renewal.entity.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

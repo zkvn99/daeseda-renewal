@@ -1,7 +1,5 @@
-package com.experiment.daeseda_renewal.service.product;
+package com.experiment.daeseda_renewal.domain.Product;
 
-import com.experiment.daeseda_renewal.entity.Product;
-import com.experiment.daeseda_renewal.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

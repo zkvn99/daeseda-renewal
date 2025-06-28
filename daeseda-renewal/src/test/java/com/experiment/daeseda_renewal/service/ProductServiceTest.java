@@ -1,15 +1,13 @@
 package com.experiment.daeseda_renewal.service;
 
-import com.experiment.daeseda_renewal.entity.Product;
-import com.experiment.daeseda_renewal.repository.ProductRepository;
-import com.experiment.daeseda_renewal.service.product.ProductService;
+import com.experiment.daeseda_renewal.domain.Product.Product;
+import com.experiment.daeseda_renewal.domain.Product.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 public class ProductServiceTest {

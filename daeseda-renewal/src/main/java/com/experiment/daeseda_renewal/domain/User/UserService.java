@@ -1,7 +1,6 @@
-package com.experiment.daeseda_renewal.service.user;
+package com.experiment.daeseda_renewal.domain.User;
 
 import com.experiment.daeseda_renewal.constant.SignupStatus;
-import com.experiment.daeseda_renewal.dto.UserDto;
 
 public interface UserService {
 

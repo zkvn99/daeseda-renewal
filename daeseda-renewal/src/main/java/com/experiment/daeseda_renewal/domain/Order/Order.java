@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.entity;
+package com.experiment.daeseda_renewal.domain.Order;
 
 
 import com.experiment.daeseda_renewal.constant.OrderStatus;

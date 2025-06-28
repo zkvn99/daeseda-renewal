@@ -1,6 +1,4 @@
-package com.experiment.daeseda_renewal.service.cart;
-
-import com.experiment.daeseda_renewal.dto.CartItemDto;
+package com.experiment.daeseda_renewal.domain.Cart;
 
 import java.util.List;
 

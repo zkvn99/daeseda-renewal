@@ -1,6 +1,4 @@
-package com.experiment.daeseda_renewal.service.order;
-
-import com.experiment.daeseda_renewal.dto.OrderDto;
+package com.experiment.daeseda_renewal.domain.Order;
 
 public interface OrderService {
 

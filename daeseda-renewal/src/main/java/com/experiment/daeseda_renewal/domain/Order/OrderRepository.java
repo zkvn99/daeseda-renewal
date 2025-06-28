@@ -1,6 +1,5 @@
-package com.experiment.daeseda_renewal.repository;
+package com.experiment.daeseda_renewal.domain.Order;
 
-import com.experiment.daeseda_renewal.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
