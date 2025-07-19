@@ -16,7 +16,7 @@ public class AsyncLoadTest {
 
     private static final Logger logger = LoggerFactory.getLogger(AsyncLoadTest.class);
 
-    private static final int THREAD_COUNT = 1000; // 동시 요청 수
+    private static final int THREAD_COUNT = 210000; // 동시 요청 수
     private static final String TEST_URL = "http://localhost:8080/";
 
     private final WebClient webClient = WebClient.create();
