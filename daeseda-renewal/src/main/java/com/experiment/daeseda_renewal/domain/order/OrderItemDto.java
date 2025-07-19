@@ -13,5 +13,5 @@ public class OrderItemDto {
     private Long productId;
     private String name;
     private int quantity;
-    private BigDecimal totalPrice;
+    private BigDecimal totalPrice;//바꿨어.
 }
