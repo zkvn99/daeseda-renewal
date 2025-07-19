@@ -1,7 +1,7 @@
 package com.experiment.daeseda_renewal.service;
 
-import com.experiment.daeseda_renewal.domain.Product.Product;
-import com.experiment.daeseda_renewal.domain.Product.ProductService;
+import com.experiment.daeseda_renewal.domain.product.Product;
+import com.experiment.daeseda_renewal.domain.product.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

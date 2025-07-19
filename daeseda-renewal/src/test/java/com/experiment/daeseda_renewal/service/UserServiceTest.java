@@ -1,9 +1,9 @@
 package com.experiment.daeseda_renewal.service;
 
-import com.experiment.daeseda_renewal.domain.User.User;
-import com.experiment.daeseda_renewal.domain.User.UserDto;
-import com.experiment.daeseda_renewal.domain.User.UserRepository;
-import com.experiment.daeseda_renewal.domain.User.UserService;
+import com.experiment.daeseda_renewal.domain.user.User;
+import com.experiment.daeseda_renewal.domain.user.UserDto;
+import com.experiment.daeseda_renewal.domain.user.UserRepository;
+import com.experiment.daeseda_renewal.domain.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
