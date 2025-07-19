@@ -36,3 +36,18 @@ daeseda-renewal/
 - 서비스별 단위/통합 테스트 작성으로 품질 관리 강화
 - k6 기반 부하 테스트 도입 및 병목 구간 파악 후 성능 최적화
 - AOP 기반 공통 로깅 및 예외 처리 적용으로 유지보수성 향상
+
+## 코드 규칙
+| 항목               | 규칙                                                                       |
+| ---------------- | ------------------------------------------------------------------------ |
+| **Entity / DTO** | setter 금지, builder 생성, 불변성 유지                                            |
+| **DTO**          | 요청/응답 분리, 검증은 Request에만 적용 (`@Valid`)                                    |
+| **Service**      | interface 기반, 구현은 Impl로 명확히 분리                                           |
+| **트랜잭션**         | 구현체의 메서드에 `@Transactional` 명시 (`readOnly=true` 기본)                       |
+| **Controller**   | View 이름 반환, `Model` 또는 `RedirectAttributes`로 데이터 전달                      |
+| **Exception 처리** | `@ControllerAdvice`로 공통 처리, 필요 시 redirect + flash 처리                     |
+| **Entity 생성 책임** | DTO의 `toEntity()` 또는 ServiceImpl 내부에서 명확히 분리                             |
+| **DTO 네이밍**      | `CreateXxxRequest`, `UpdateXxxRequest`, `XxxView`, `XxxListItem` 등 목적 기반 |
+| **패키지 구조**       | 도메인 기반 계층 분리 (`domain.xxx.controller`, `dto`, `entity`, ...)             |
+| **Entity 생성자 관리**       | `@NoArgsConstructor(access = PROTECTED)` + `@Builder`로 객체 생성 제한          |
+
