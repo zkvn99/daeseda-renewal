@@ -1,67 +1,42 @@
 package com.experiment.daeseda_renewal.domain.order;
 
-import com.experiment.daeseda_renewal.domain.cart.CartItemDto;
-import com.experiment.daeseda_renewal.domain.cart.CartService;
-import com.experiment.daeseda_renewal.domain.product.Product;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+
 public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final CartService cartService;
 
     @Override
-    public void requestOrder() {
-
-    }
-
-    @Override
-    public OrderDto placeOrder(Long userId) {
-        List<CartItemDto> cartItems = cartService.getCartItems(userId);
-        if (cartItems.isEmpty()) {
-            throw new IllegalStateException("장바구니가 비어 있습니다.");
-        }
-
+    @Transactional
+    public OrderDto createOrder(OrderDto orderDto) {
         Order order = Order.builder()
-                .userId(userId)
-                .orderDate(LocalDateTime.now())
+                .regTime(LocalDateTime.now())
+                .modTime(null)
+                .deliveryDate(orderDto.getDeliveryDate())
+                .pickupDate(orderDto.getPickupDate())
+                .orderStatus(orderDto.getOrderStatus())
+                .totalPrice(orderDto.getTotalPrice())
+                .washingMethod(orderDto.getWashingMethod())
                 .build();
 
-        for (CartItemDto cartItem : cartItems) {
-            OrderItem orderItem = OrderItem.builder()
-                    .order(order)
-                    .product(Product.builder().id(cartItem.getProductId()).build())
-                    .quantity(cartItem.getQuantity())
-                    .price(cartItem.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
-                    .build();
-
-            order.addOrderItem(orderItem);
-        }
-
-        orderRepository.save(order);
-        cartService.clearCart(userId);
+        Order savedOrder = orderRepository.save(order);
 
         return OrderDto.builder()
-                .orderId(order.getId())
-                .userId(order.getUserId())
-                .orderDate(order.getOrderDate())
-                .orderItems(cartItems.stream()
-                        .map(cartItem -> OrderItemDto.builder()
-                                .productId(cartItem.getProductId())
-                                .name(cartItem.getName())
-                                .quantity(cartItem.getQuantity())
-                                .totalPrice(cartItem.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
-                                .build())
-                        .collect(Collectors.toList()))
+                .orderId(savedOrder.getOrderId())
+                .regTime(savedOrder.getRegTime())
+                .modTime(savedOrder.getModTime())
+                .deliveryDate(savedOrder.getDeliveryDate())
+                .pickupDate(savedOrder.getPickupDate())
+                .orderStatus(savedOrder.getOrderStatus())
+                .totalPrice(savedOrder.getTotalPrice())
+                .washingMethod(savedOrder.getWashingMethod())
                 .build();
     }
 }
