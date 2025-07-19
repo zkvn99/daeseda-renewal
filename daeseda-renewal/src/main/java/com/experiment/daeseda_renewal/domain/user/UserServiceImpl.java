@@ -40,16 +40,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto login(UserDto userDTO) {
-        User user = userRepository.findByEmail(userDTO.getEmail());
-        if(user == null) {
-            return null;
-        } else {
-            if(passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+        Optional<User> userOptional = userRepository.findByEmail(userDTO.getEmail());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
                 return UserDto.fromUser(user);
-            } else {
-                return null;
             }
         }
+
+        return null;
     }
 
     @Override
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean delete(UserDto userDto) {
-        Optional<User> user = userRepository.findByUserEmail(userDto.getEmail());
+        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
 
         // 삭제 성공했는지 확인 이후 분기 처리
         if (user.isPresent()) {
