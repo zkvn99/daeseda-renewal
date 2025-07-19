@@ -1,14 +1,14 @@
 package com.experiment.daeseda_renewal.domain.address;
 
-import com.experiment.daeseda_renewal.domain.address.dto.AddressDto;
+import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
 
 import java.util.List;
 
 public interface AddressService {
 
-    boolean createAddress(AddressDto addressDto);
+    boolean createAddress(CreateAddressRequest addressDto);
 
-    List<AddressDto> getMyAddressList();
+    List<CreateAddressRequest> getMyAddressList();
 
-    boolean delete(AddressDto addressDto);
+    boolean delete(CreateAddressRequest addressDto);
 }

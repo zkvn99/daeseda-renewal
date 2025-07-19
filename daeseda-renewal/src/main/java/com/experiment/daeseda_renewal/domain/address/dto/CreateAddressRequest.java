@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AddressDto {
+public class CreateAddressRequest {
     private String addressName;
     private String addressDetail;
-    private int addressZipcode;
+    private String addressZipcode;
     private String addressRoad;
+    private boolean defaultAddress;
 }

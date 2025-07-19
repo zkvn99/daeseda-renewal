@@ -28,7 +28,7 @@ public class UserApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/mailAuthentication")
+    @PostMapping("/mail-authentication")
     public ResponseEntity<String> mailAuthentication(@RequestParam String email) throws Exception {
         boolean isDuplicate = userService.isEmailDuplicate(email);
 
