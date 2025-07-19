@@ -1,6 +1,6 @@
 package com.experiment.daeseda_renewal.domain.order;
 
-import com.experiment.daeseda_renewal.domain.product.Product;
+import com.experiment.daeseda_renewal.domain.clothes.Clothes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
+    private Clothes product;
 
     @Column
     private int quantity;

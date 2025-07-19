@@ -2,7 +2,7 @@ package com.experiment.daeseda_renewal.domain.order;
 
 import com.experiment.daeseda_renewal.domain.cart.CartItemDto;
 import com.experiment.daeseda_renewal.domain.cart.CartService;
-import com.experiment.daeseda_renewal.domain.product.Product;
+import com.experiment.daeseda_renewal.domain.clothes.Clothes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class OrderServiceImpl implements OrderService{
         for (CartItemDto cartItem : cartItems) {
             OrderItem orderItem = OrderItem.builder()
                     .order(order)
-                    .product(Product.builder().id(cartItem.getProductId()).build())
+                    .product(Clothes.builder().id(cartItem.getProductId()).build())
                     .quantity(cartItem.getQuantity())
                     .price(cartItem.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                     .build();

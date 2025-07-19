@@ -4,7 +4,7 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/daeseda
-    username: daeseda
+    username: minjoo
     password: 1234
     driver-class-name: org.postgresql.Driver
     hikari:
@@ -62,5 +62,5 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true

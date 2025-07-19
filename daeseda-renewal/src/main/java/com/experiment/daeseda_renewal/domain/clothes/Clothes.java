@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.domain.product;
+package com.experiment.daeseda_renewal.domain.clothes;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "products")
+@Table(name = "clothes")
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Clothes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,5 +25,5 @@ public class Product {
     private String name;
 
     @Column
-    private BigDecimal price;
+    private BigDecimal laundryCost;
 }

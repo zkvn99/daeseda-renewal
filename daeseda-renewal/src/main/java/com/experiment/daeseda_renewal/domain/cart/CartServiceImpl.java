@@ -1,7 +1,7 @@
 package com.experiment.daeseda_renewal.domain.cart;
 
-import com.experiment.daeseda_renewal.domain.product.Product;
-import com.experiment.daeseda_renewal.domain.product.ProductRepository;
+import com.experiment.daeseda_renewal.domain.clothes.Clothes;
+import com.experiment.daeseda_renewal.domain.clothes.ClothesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     private final CartItemRepository cartItemRepository;
-    private final ProductRepository productRepository;
+    private final ClothesRepository productRepository;
 
     @Override
     public void addToCart(Long userId, Long productId, int quantity) {
-        Product product = productRepository.findById(productId)
+        Clothes product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
         CartItem cartItem = CartItem.builder()
@@ -40,7 +40,7 @@ public class CartServiceImpl implements CartService {
                         .productId(cartItem.getProduct().getId())
                         .name(cartItem.getProduct().getName())
                         .quantity(cartItem.getQuantity())
-                        .price(cartItem.getProduct().getPrice()) // 가격 가져오기
+                        .price(cartItem.getProduct().getLaundryCost()) // 가격 가져오기
                         .build())
                 .collect(Collectors.toList());
     }
