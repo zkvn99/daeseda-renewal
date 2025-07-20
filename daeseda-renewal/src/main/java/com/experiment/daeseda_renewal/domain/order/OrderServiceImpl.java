@@ -39,4 +39,11 @@ public class OrderServiceImpl implements OrderService{
                 .washingMethod(savedOrder.getWashingMethod())
                 .build();
     }
+
+    @Override
+    public OrderDto getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+        return new OrderDto(order.getOrderId(),order.getRegTime(),order.getModTime(),order.getDeliveryDate(),order.getOrderStatus(),order.getPickupDate(),order.getTotalPrice(),order.getWashingMethod());
+    }
 }
