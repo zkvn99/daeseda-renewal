@@ -4,7 +4,10 @@ import com.experiment.daeseda_renewal.domain.address.Address;
 import com.experiment.daeseda_renewal.domain.address.AddressRepository;
 import com.experiment.daeseda_renewal.domain.address.AddressService;
 import com.experiment.daeseda_renewal.domain.address.AddressServiceImpl;
+import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
+import com.experiment.daeseda_renewal.domain.user.User;
+import com.experiment.daeseda_renewal.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -15,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +34,9 @@ public class AddressServiceTest {
 
     @Mock
     private AddressRepository addressRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Captor
     private ArgumentCaptor<Address> addressCaptor;
@@ -79,4 +86,47 @@ public class AddressServiceTest {
             System.out.printf("[%d] name=%s, zipcode=%s%n", i, saved.getAddressName(), saved.getAddressZipcode());
         }
     }
+
+    @Test
+    void getMyAddressList_success() {
+        // Given
+        Long userId = 1L;
+        User mockUser = User.builder().id(userId).build();
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(mockUser));
+
+        List<Address> addressList = IntStream.range(0, 5)
+                .mapToObj(i -> Address.builder()
+                        .addressId((long) i)
+                        .addressDetail("detail" + i)
+                        .addressRoad("road" + i)
+                        .addressName("name" + i)
+                        .addressZipcode("2001" + i)
+                        .user(mockUser)
+                        .build())
+                .toList();
+
+        when(addressRepository.findByUser(mockUser))
+                .thenReturn(addressList);
+
+        // When
+        List<AddressResponse> result = addressService.getMyAddressList(userId);
+
+        // Then
+        assertEquals(5, result.size());
+
+        for (int i = 0; i < 5; i++) {
+            AddressResponse dto = result.get(i);
+            assertEquals(i, dto.getAddressId());
+            assertEquals("detail" + i, dto.getAddressDetail());
+            assertEquals("road" + i, dto.getAddressRoad());
+            assertEquals("name" + i, dto.getAddressName());
+            assertEquals("2001" + i, dto.getAddressZipcode());
+            assertEquals(userId, dto.getUserId());
+
+            System.out.printf("[%d] id=%s, name=%s, user=%s%n", i, dto.getAddressId(), dto.getAddressName(), dto.getUserId());
+        }
+    }
+
 }

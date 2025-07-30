@@ -1,17 +1,23 @@
 package com.experiment.daeseda_renewal.domain.address;
 
+import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
+import com.experiment.daeseda_renewal.domain.user.User;
+import com.experiment.daeseda_renewal.domain.user.UserRepository;
 import com.experiment.daeseda_renewal.global.exception.AddressException;
+import com.experiment.daeseda_renewal.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
 
     @Override
     public boolean createAddress(CreateAddressRequest addressDto) {
@@ -42,8 +48,22 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public List<CreateAddressRequest> getMyAddressList() {
-        return null;
+    public List<AddressResponse> getMyAddressList(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("해당 사용자가 존재하지 않습니다."));
+
+        List<Address> addressList = addressRepository.findByUser(user);
+
+        return addressList.stream()
+                .map(address -> AddressResponse.builder()
+                        .addressId(address.getAddressId())
+                        .addressDetail(address.getAddressDetail())
+                        .addressZipcode(address.getAddressZipcode())
+                        .addressName(address.getAddressName())
+                        .addressRoad(address.getAddressRoad())
+                        .userId(user.getId())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
