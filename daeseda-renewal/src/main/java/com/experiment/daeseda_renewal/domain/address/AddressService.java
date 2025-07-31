@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface AddressService {
 
-    boolean createAddress(CreateAddressRequest addressDto);
+    void createAddress(CreateAddressRequest addressDto);
 
     List<AddressResponse> getMyAddressList(Long userId);
 
-    boolean delete(CreateAddressRequest addressDto);
+    void delete(Long addressId, Long userId);
 }

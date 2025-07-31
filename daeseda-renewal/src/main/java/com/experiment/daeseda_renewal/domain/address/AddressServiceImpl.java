@@ -6,6 +6,7 @@ import com.experiment.daeseda_renewal.domain.user.User;
 import com.experiment.daeseda_renewal.domain.user.UserRepository;
 import com.experiment.daeseda_renewal.global.exception.AddressException;
 import com.experiment.daeseda_renewal.global.exception.NotFoundException;
+import com.experiment.daeseda_renewal.global.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class AddressServiceImpl implements AddressService{
     private final UserRepository userRepository;
 
     @Override
-    public boolean createAddress(CreateAddressRequest addressDto) {
+    public void createAddress(CreateAddressRequest addressDto) {
 
         boolean exists = addressRepository.existsByAddressZipcodeAndAddressDetail(
                 addressDto.getAddressZipcode(),
@@ -40,7 +41,6 @@ public class AddressServiceImpl implements AddressService{
 
         try {
             addressRepository.save(address);
-            return true;
         } catch (Exception e) {
             throw new AddressException("주소 저장 중 오류가 발생했습니다.", e);
         }
@@ -67,7 +67,18 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public boolean delete(CreateAddressRequest addressDto) {
-        return false;
+    public void delete(Long addressId, Long userId) {
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new NotFoundException("주소가 존재하지 않습니다."));
+
+        if (!address.getUser().getId().equals(userId)) {
+            throw new UnauthorizedAccessException("본인의 주소만 삭제할 수 있습니다.");
+        }
+
+        try {
+            addressRepository.delete(address);
+        } catch (Exception e) {
+            throw new AddressException("주소 삭제 중 오류가 발생했습니다.", e);
+        }
     }
 }
