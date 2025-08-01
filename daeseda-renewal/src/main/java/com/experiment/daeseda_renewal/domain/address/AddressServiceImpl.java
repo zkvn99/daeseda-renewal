@@ -1,12 +1,11 @@
 package com.experiment.daeseda_renewal.domain.address;
 
+import com.experiment.daeseda_renewal.constant.ErrorCode;
 import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
 import com.experiment.daeseda_renewal.domain.user.User;
 import com.experiment.daeseda_renewal.domain.user.UserRepository;
-import com.experiment.daeseda_renewal.global.exception.AddressException;
-import com.experiment.daeseda_renewal.global.exception.NotFoundException;
-import com.experiment.daeseda_renewal.global.exception.UnauthorizedAccessException;
+import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class AddressServiceImpl implements AddressService{
         );
 
         if (exists) {
-            throw new AddressException("이미 등록된 주소입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_ADDR);
         }
 
         Address address = Address.builder()
@@ -42,7 +41,7 @@ public class AddressServiceImpl implements AddressService{
         try {
             addressRepository.save(address);
         } catch (Exception e) {
-            throw new AddressException("주소 저장 중 오류가 발생했습니다.", e);
+            throw new BusinessException(ErrorCode.ADDR_CREATE_FAILED);
         }
 
     }
@@ -50,7 +49,7 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public List<AddressResponse> getMyAddressList(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("해당 사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         List<Address> addressList = addressRepository.findByUser(user);
 
@@ -69,16 +68,16 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public void delete(Long addressId, Long userId) {
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new NotFoundException("주소가 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ADDR_NOT_FOUND));
 
         if (!address.getUser().getId().equals(userId)) {
-            throw new UnauthorizedAccessException("본인의 주소만 삭제할 수 있습니다.");
+            throw new BusinessException(ErrorCode.ADDR_DELETE_FORBIDDEN);
         }
 
         try {
             addressRepository.delete(address);
         } catch (Exception e) {
-            throw new AddressException("주소 삭제 중 오류가 발생했습니다.", e);
+            throw new BusinessException(ErrorCode.ADDR_DELETE_FAILED);
         }
     }
 }
