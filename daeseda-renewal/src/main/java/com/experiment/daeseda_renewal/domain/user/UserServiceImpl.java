@@ -4,6 +4,7 @@ import com.experiment.daeseda_renewal.constant.ErrorCode;
 import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,8 @@ public class UserServiceImpl implements UserService {
 
     try {
       userRepository.save(user);
-    } catch (Exception e) {
-      throw new BusinessException(ErrorCode.DB_ERROR);
+    } catch (DataAccessException dae) {
+      throw new BusinessException(ErrorCode.DB_ERROR, dae);
     }
   }
 
@@ -51,17 +52,22 @@ public class UserServiceImpl implements UserService {
 
       return UserDto.fromUser(user);
 
-    } catch (Exception e) {
-      throw new BusinessException(ErrorCode.DB_ERROR);
+    } catch (DataAccessException dae) {
+      throw new BusinessException(ErrorCode.DB_ERROR, dae);
     }
   }
 
   @Override
   public String findEmailByName(String name) {
-    User user = Optional.ofNullable(userRepository.findByName(name))
-                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-    return user.getEmail();
+    try {
+      User user = Optional.ofNullable(userRepository.findByName(name))
+                          .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+      return user.getEmail();
+    } catch (DataAccessException dae) {
+      throw new BusinessException(ErrorCode.DB_ERROR, dae);
+    }
   }
 
   @Override
@@ -71,13 +77,13 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void delete(UserDto userDto) {
-    User user = userRepository.findByEmail(userDto.getEmail())
-                              .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다."));
 
     try {
+      User user = userRepository.findByEmail(userDto.getEmail())
+                                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
       userRepository.deleteById(user.getId());
-    } catch (Exception e) {
-      throw new UserDeleteException("회원 삭제 중 오류가 발생했습니다.", e);
+    } catch (DataAccessException dae) {
+      throw new BusinessException(ErrorCode.DB_ERROR, dae);
     }
   }
 }
