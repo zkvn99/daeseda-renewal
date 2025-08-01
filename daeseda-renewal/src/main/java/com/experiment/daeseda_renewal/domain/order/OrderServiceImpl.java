@@ -56,7 +56,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateOrder(Long orderId, OrderDto orderDto) {
-        return null;
+    @Transactional
+    public OrderDto updateOrderByOrderId(Long orderId, OrderDto orderDto) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("주문을 찾을 수 없습니다."));
+
+        order.updateFromDto(orderDto);
+
+        return OrderDto.builder()
+                .orderId(order.getOrderId())
+                .regTime(order.getRegTime())
+                .modTime(order.getModTime())
+                .deliveryDate(order.getDeliveryDate())
+                .pickupDate(order.getPickupDate())
+                .orderStatus(order.getOrderStatus())
+                .totalPrice(order.getTotalPrice())
+                .washingMethod(order.getWashingMethod())
+                .build();
     }
 }

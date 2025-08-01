@@ -95,6 +95,43 @@ public class OrderServiceTest {
 
         //then
         assertTrue(orderRepository.findByOrderId(orderId).isEmpty());
+    }
 
+    @Test
+    @DisplayName("주문 수정")
+    void updateOrderSuccess() {
+        //given 주문 생성
+        OrderDto originalOrder = OrderDto.builder()
+                .deliveryDate(LocalDate.now().plusDays(1))
+                .pickupDate(LocalDateTime.now().plusHours(3))
+                .orderStatus(OrderStatus.CASH)
+                .totalPrice(new BigDecimal("100.00"))
+                .washingMethod("드라크리닝")
+                .build();
+
+        OrderDto savedOrder = orderService.createOrder(originalOrder);
+        Long orderId = savedOrder.getOrderId();
+        OrderDto updateDto = OrderDto.builder()
+                .regTime(savedOrder.getRegTime())
+                .modTime(LocalDateTime.now())
+                .deliveryDate(LocalDate.now().plusDays(5))
+                .pickupDate(LocalDateTime.now().plusDays(4).withHour(10).withMinute(30))
+                .orderStatus(OrderStatus.COMPLETE)
+                .totalPrice(new BigDecimal("150.00"))
+                .washingMethod("일반세탁")
+                .build();
+
+        //when
+        OrderDto updatedOrder = orderService.updateOrderByOrderId(orderId, updateDto);
+
+        //then
+        assertThat(updatedOrder).isNotNull();
+        assertThat(updatedOrder.getOrderId()).isEqualTo(orderId);
+        assertThat(updatedOrder.getDeliveryDate()).isEqualTo(updateDto.getDeliveryDate());
+        assertThat(updatedOrder.getPickupDate()).isEqualTo(updateDto.getPickupDate());
+        assertThat(updatedOrder.getOrderStatus()).isEqualTo(updateDto.getOrderStatus());
+        assertThat(updatedOrder.getTotalPrice()).isEqualTo(updateDto.getTotalPrice());
+        assertThat(updatedOrder.getWashingMethod()).isEqualTo(updateDto.getWashingMethod());
+        assertThat(updatedOrder.getModTime()).isEqualTo(updateDto.getModTime());
     }
 }
