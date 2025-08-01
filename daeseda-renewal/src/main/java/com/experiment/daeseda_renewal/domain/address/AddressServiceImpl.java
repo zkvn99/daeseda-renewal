@@ -1,20 +1,26 @@
 package com.experiment.daeseda_renewal.domain.address;
 
+import com.experiment.daeseda_renewal.constant.ErrorCode;
+import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
-import com.experiment.daeseda_renewal.global.exception.AddressException;
+import com.experiment.daeseda_renewal.domain.user.User;
+import com.experiment.daeseda_renewal.domain.user.UserRepository;
+import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public boolean createAddress(CreateAddressRequest addressDto) {
+    public void createAddress(CreateAddressRequest addressDto) {
 
         boolean exists = addressRepository.existsByAddressZipcodeAndAddressDetail(
                 addressDto.getAddressZipcode(),
@@ -22,7 +28,7 @@ public class AddressServiceImpl implements AddressService{
         );
 
         if (exists) {
-            throw new AddressException("이미 등록된 주소입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_ADDR);
         }
 
         Address address = Address.builder()
@@ -34,20 +40,44 @@ public class AddressServiceImpl implements AddressService{
 
         try {
             addressRepository.save(address);
-            return true;
         } catch (Exception e) {
-            throw new AddressException("주소 저장 중 오류가 발생했습니다.", e);
+            throw new BusinessException(ErrorCode.ADDR_CREATE_FAILED);
         }
 
     }
 
     @Override
-    public List<CreateAddressRequest> getMyAddressList() {
-        return null;
+    public List<AddressResponse> getMyAddressList(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        List<Address> addressList = addressRepository.findByUser(user);
+
+        return addressList.stream()
+                .map(address -> AddressResponse.builder()
+                        .addressId(address.getAddressId())
+                        .addressDetail(address.getAddressDetail())
+                        .addressZipcode(address.getAddressZipcode())
+                        .addressName(address.getAddressName())
+                        .addressRoad(address.getAddressRoad())
+                        .userId(user.getId())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
-    public boolean delete(CreateAddressRequest addressDto) {
-        return false;
+    public void delete(Long addressId, Long userId) {
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ADDR_NOT_FOUND));
+
+        if (!address.getUser().getId().equals(userId)) {
+            throw new BusinessException(ErrorCode.ADDR_DELETE_FORBIDDEN);
+        }
+
+        try {
+            addressRepository.delete(address);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.ADDR_DELETE_FAILED);
+        }
     }
 }
