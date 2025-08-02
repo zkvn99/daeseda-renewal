@@ -7,8 +7,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CreateAddressRequest {
-
+public class AddressResponse {
+    private Long addressId;
     @NotBlank(message = "주소 상세 정보는 필수입니다.")
     private String addressName;
     private String addressDetail;

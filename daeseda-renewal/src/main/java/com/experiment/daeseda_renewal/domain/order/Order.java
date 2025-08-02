@@ -9,9 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -25,25 +24,43 @@ public class Order {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long orderId;
 
-    private Long userId;
+    @Column(nullable = false)
+    private LocalDateTime regTime;
+
+    @Column
+    private LocalDateTime modTime;
+
+    @Column
+    private LocalDate deliveryDate;
 
     @Enumerated(EnumType.STRING)
     @Column
     private OrderStatus orderStatus;
 
     @Column
-    private LocalDateTime orderDate;
+    private LocalDateTime pickupDate;
 
     @Column
-    private BigDecimal totalAmount;
+    private BigDecimal totalPrice;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @Column
+    private String washingMethod;
+
+   /* @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+   @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;*/
+
+   /* @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();*/
 
-    public void addOrderItem(OrderItem orderItem) {
+   /* public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
-    }
+    }*/
 }
