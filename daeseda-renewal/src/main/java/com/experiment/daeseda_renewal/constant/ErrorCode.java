@@ -53,7 +53,10 @@ public enum ErrorCode {
   DUPLICATE_EMAIL("USER-CREATE-001", "이미 가입된 이메일입니다.", HttpStatus.CONFLICT, LogLevel.INFO),
   LOGIN_VALID_FAILED("USER-LOGIN-001", "이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED,
                      LogLevel.INFO),
-  USER_NOT_FOUND("USER-FIND-001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND, LogLevel.INFO);
+  USER_NOT_FOUND("USER-FIND-001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND, LogLevel.INFO),
+
+  // 주문 관련 에러코드 (ORDER)
+  ORDER_NOT_FOUND("ORDER_FIND_001", "주문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND, LogLevel.INFO);
 
   private final String code;
   private final String message;
