@@ -6,8 +6,6 @@ import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 
 /**
- * 에러코드 정의 기준
- * <p>
  * [형식] - code: 도메인 약어 - 행위 - 일련번호 (예: ADDR-CREATE-001) - message: 사용자에게 보여줄 메시지 (자연어) - httpStatus:
  * 상황에 맞는 HTTP 상태 코드 400 Bad Request             요청 자체가 잘못됨, 유효성 실패, 파라미터 누락, 요청값에 문제 있음 401
  * Unauthorized            인증 실패, 로그인 실패, 로그인 안 했거나 세션 만료 403 Forbidden	            권한 없음, 관리자 전용
