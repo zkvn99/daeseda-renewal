@@ -63,4 +63,13 @@ public class Order {
    /* public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
     }*/
+
+    public void updateFromDto(OrderDto dto) {
+        this.modTime = LocalDateTime.now();
+        this.deliveryDate = dto.getDeliveryDate();
+        this.pickupDate = dto.getPickupDate();
+        this.orderStatus = dto.getOrderStatus();
+        this.totalPrice = dto.getTotalPrice();
+        this.washingMethod = dto.getWashingMethod();
+    }
 }
