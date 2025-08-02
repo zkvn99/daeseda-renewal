@@ -6,7 +6,6 @@ import org.springframework.boot.logging.LogLevel;
 import org.springframework.http.HttpStatus;
 
 /**
- * 에러코드 정의 기준
  *
  * [형식]
  *   - code: 도메인 약어 - 행위 - 일련번호 (예: ADDR-CREATE-001)
@@ -40,22 +39,26 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
-    // 주소 관련 에러 코드
-    DUPLICATE_ADDR("ADDR-CREATE-001", "이미 등록된 주소입니다.", HttpStatus.CONFLICT, LogLevel.INFO),
-    ADDR_CREATE_FAILED("ADDR-CREATE-002", "주소 저장 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR, LogLevel.ERROR),
-    ADDR_NOT_FOUND("ADDR_DELETE-001", "주소가 존재하지 않습니다.", HttpStatus.NOT_FOUND, LogLevel.INFO),
-    ADDR_DELETE_FORBIDDEN("ADDR-DELETE-002", "주소를 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN, LogLevel.WARN),
-    ADDR_DELETE_FAILED("ADDR-DELETE-003", "주소 삭제 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR, LogLevel.ERROR),
+  // DB 관련 에러 코드 (CRUD)
+  DB_ERROR("SYS-DB-001", "데이터베이스 처리 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR,
+           LogLevel.ERROR),
 
-    DUPLICATE_EMAIL("E001", "이미 가입된 이메일입니다.", HttpStatus.CONFLICT, LogLevel.INFO),
-    USER_NOT_FOUND("USR-FIND-001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND, LogLevel.INFO),
-    LOGIN_FAILED("E003", "이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED, LogLevel.INFO),
-    USER_DELETE_FAILED("E004", "사용자 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR, LogLevel.INFO);
+  // 주소 관련 에러 코드 (ADDRESS)
+  DUPLICATE_ADDR("ADDR-CREATE-001", "이미 등록된 주소입니다.", HttpStatus.CONFLICT, LogLevel.INFO),
+  ADDR_NOT_FOUND("ADDR_DELETE-001", "주소가 존재하지 않습니다.", HttpStatus.NOT_FOUND, LogLevel.INFO),
+  ADDR_DELETE_FORBIDDEN("ADDR-DELETE-002", "주소를 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN,
+                        LogLevel.WARN),
 
-    private final String code;
-    private final String message;
-    private final HttpStatus httpStatus;
-    private final LogLevel logLevel;
+  // 유저 관련 에러 코드 (USER)
+  DUPLICATE_EMAIL("USER-CREATE-001", "이미 가입된 이메일입니다.", HttpStatus.CONFLICT, LogLevel.INFO),
+  LOGIN_VALID_FAILED("USER-LOGIN-001", "이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED,
+                     LogLevel.INFO),
+  USER_NOT_FOUND("USER-FIND-001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND, LogLevel.INFO);
+
+  private final String code;
+  private final String message;
+  private final HttpStatus httpStatus;
+  private final LogLevel logLevel;
 
 }
 
