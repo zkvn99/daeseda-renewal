@@ -1,6 +1,6 @@
 package com.experiment.daeseda_renewal.domain.cart;
 
-import com.experiment.daeseda_renewal.domain.product.Product;
+import com.experiment.daeseda_renewal.domain.clothes.Clothes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class CartItem {
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    private Clothes product;
 
     private int quantity;
 }
