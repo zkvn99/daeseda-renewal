@@ -24,11 +24,7 @@ public class ClothesController {
         return "clothes/list";
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerClothes(@RequestBody CreateClothesDTO clothesDTO) {
-        clothesService.createClothes(clothesDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+
 
 
 
