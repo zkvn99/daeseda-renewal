@@ -1,82 +1,68 @@
 package com.experiment.daeseda_renewal.domain.user;
 
-import com.experiment.daeseda_renewal.constant.SignupStatus;
+import com.experiment.daeseda_renewal.constant.ErrorCode;
+import com.experiment.daeseda_renewal.global.exception.BusinessException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public SignupStatus signUp(UserDto userDTO) {
+  @Override
+  public void signUp(UserDto userDTO) {
 
-        if (userRepository.existsByEmail(userDTO.getEmail())) {
-            return  SignupStatus.EMAIL_ALREADY_EXISTS;
-        }
+    if (userRepository.existsByEmail(userDTO.getEmail())) {
+      throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+    }
 
-        User user = User.builder()
+    User user = User.builder()
                     .name(userDTO.getName())
                     .email(userDTO.getEmail())
                     .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build();
-        try {
-            userRepository.save(user);
-            return SignupStatus.SUCCESS;
-        } catch (Exception e) {
-            return SignupStatus.FAIL;
-        }
+
+    userRepository.save(user);
+  }
+
+  @Override
+  public void signOut() {
+  }
+
+  @Override
+  public UserDto login(UserDto userDTO) {
+    User user = userRepository.findByEmail(userDTO.getEmail())
+                              .orElseThrow(
+                                  () -> new BusinessException(ErrorCode.LOGIN_VALID_FAILED));
+    if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+      throw new BusinessException(ErrorCode.LOGIN_VALID_FAILED);
     }
 
-    @Override
-    public void signOut() {
-    }
+    return UserDto.fromUser(user);
+  }
 
-    @Override
-    public UserDto login(UserDto userDTO) {
-        Optional<User> userOptional = userRepository.findByEmail(userDTO.getEmail());
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-                return UserDto.fromUser(user);
-            }
-        }
+  @Override
+  public String findEmailByName(String name) {
+    User user = Optional.ofNullable(userRepository.findByName(name))
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        return null;
-    }
+    return user.getEmail();
+  }
 
-    @Override
-    public String findEmailByName(String name) {
-        User user = userRepository.findByName(name);
-        if(user == null) {
-            return null;
-        } else {
-            return user.getEmail();
-        }
-    }
+  @Override
+  public boolean isEmailDuplicate(String email) {
+    return userRepository.existsByEmail(email);
+  }
 
-    @Override
-    public boolean isEmailDuplicate(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Override
-    public boolean delete(UserDto userDto) {
-        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
-
-        // 삭제 성공했는지 확인 이후 분기 처리
-        if (user.isPresent()) {
-            userRepository.deleteById(user.get().getId());
-            boolean stillExists = userRepository.existsById(user.get().getId());
-            return !stillExists;
-        } else {
-            return false; // 삭제 대상 없음
-        }
-    }
+  @Override
+  public void delete(UserDto userDto) {
+    User user = userRepository.findByEmail(userDto.getEmail())
+                              .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    userRepository.deleteById(user.getId());
+  }
 }
