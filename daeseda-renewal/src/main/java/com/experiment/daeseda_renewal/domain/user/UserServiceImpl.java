@@ -4,7 +4,6 @@ import com.experiment.daeseda_renewal.constant.ErrorCode;
 import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +27,7 @@ public class UserServiceImpl implements UserService {
                     .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build();
 
-    try {
-      userRepository.save(user);
-    } catch (DataAccessException dae) {
-      throw new BusinessException(ErrorCode.DB_ERROR, dae);
-    }
+    userRepository.save(user);
   }
 
   @Override
@@ -41,33 +36,22 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto login(UserDto userDTO) {
-    try {
-      User user = userRepository.findByEmail(userDTO.getEmail())
-                                .orElseThrow(
-                                    () -> new BusinessException(ErrorCode.LOGIN_VALID_FAILED));
-
-      if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-        throw new BusinessException(ErrorCode.LOGIN_VALID_FAILED);
-      }
-
-      return UserDto.fromUser(user);
-
-    } catch (DataAccessException dae) {
-      throw new BusinessException(ErrorCode.DB_ERROR, dae);
+    User user = userRepository.findByEmail(userDTO.getEmail())
+                              .orElseThrow(
+                                  () -> new BusinessException(ErrorCode.LOGIN_VALID_FAILED));
+    if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+      throw new BusinessException(ErrorCode.LOGIN_VALID_FAILED);
     }
+
+    return UserDto.fromUser(user);
   }
 
   @Override
   public String findEmailByName(String name) {
+    User user = Optional.ofNullable(userRepository.findByName(name))
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-    try {
-      User user = Optional.ofNullable(userRepository.findByName(name))
-                          .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
-      return user.getEmail();
-    } catch (DataAccessException dae) {
-      throw new BusinessException(ErrorCode.DB_ERROR, dae);
-    }
+    return user.getEmail();
   }
 
   @Override
@@ -77,13 +61,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void delete(UserDto userDto) {
-
-    try {
-      User user = userRepository.findByEmail(userDto.getEmail())
-                                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-      userRepository.deleteById(user.getId());
-    } catch (DataAccessException dae) {
-      throw new BusinessException(ErrorCode.DB_ERROR, dae);
-    }
+    User user = userRepository.findByEmail(userDto.getEmail())
+                              .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    userRepository.deleteById(user.getId());
   }
 }
