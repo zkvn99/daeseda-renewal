@@ -38,3 +38,4 @@ out/
 
 ### Settings ###
 **/src/main/resources/application-dev.yml
+logs/
