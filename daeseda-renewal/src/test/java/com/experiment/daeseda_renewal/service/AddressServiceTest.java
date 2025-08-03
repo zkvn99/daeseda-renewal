@@ -11,10 +11,8 @@ import com.experiment.daeseda_renewal.domain.address.AddressRepository;
 import com.experiment.daeseda_renewal.domain.address.AddressServiceImpl;
 import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
-import com.experiment.daeseda_renewal.domain.user.User;
 import com.experiment.daeseda_renewal.domain.user.UserRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -99,13 +97,6 @@ public class AddressServiceTest {
   void getMyAddressList_success() {
     // Given
     Long userId = 1L;
-    User mockUser = User.builder()
-                        .id(userId)
-                        .build();
-
-    when(userRepository.findById(userId))
-        .thenReturn(Optional.of(mockUser));
-
     List<Address> addressList = IntStream.range(0, 5)
                                          .mapToObj(i -> Address.builder()
                                                                .addressId((long) i)
@@ -113,11 +104,11 @@ public class AddressServiceTest {
                                                                .addressRoad("road" + i)
                                                                .addressName("name" + i)
                                                                .addressZipcode("2001" + i)
-                                                               .user(mockUser)
+                                                               .userId(userId)
                                                                .build())
                                          .toList();
 
-    when(addressRepository.findByUser(mockUser))
+    when(addressRepository.findByUserId(userId))
         .thenReturn(addressList);
 
     // When
