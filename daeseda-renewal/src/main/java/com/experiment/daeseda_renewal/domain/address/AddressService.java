@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AddressService {
 
-  void createAddress(CreateAddressRequest addressDto);
+  void createAddress(CreateAddressRequest request);
 
   List<AddressResponse> getMyAddressList(Long userId);
 

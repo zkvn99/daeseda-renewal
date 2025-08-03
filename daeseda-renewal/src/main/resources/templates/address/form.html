@@ -1,0 +1,62 @@
+<!-- templates/address/form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>주소 등록</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+<h2>주소 등록 (Fetch 기반)</h2>
+
+<!-- 기존 form 제거 → JS 기반으로 처리 -->
+<div>
+  <label>주소 이름:</label>
+  <input type="text" id="addressName"/><br/>
+
+  <label>주소 상세:</label>
+  <input type="text" id="addressDetail"/><br/>
+
+  <label>우편번호:</label>
+  <input type="text" id="addressZipcode"/><br/>
+
+  <label>도로명 주소:</label>
+  <input type="text" id="addressRoad"/><br/>
+
+  <label>기본 주소로 설정:</label>
+  <input type="checkbox" id="defaultAddress"/><br/>
+
+  <input type="hidden" id="userId" value="1"/>
+
+  <button onclick="submitAddress()">등록</button>
+</div>
+
+<script>
+  async function submitAddress() {
+    const data = {
+      addressName: document.querySelector("#addressName").value,
+      addressDetail: document.querySelector("#addressDetail").value,
+      addressZipcode: document.querySelector("#addressZipcode").value,
+      addressRoad: document.querySelector("#addressRoad").value,
+      defaultAddress: document.querySelector("#defaultAddress").checked,
+      userId: Number(document.querySelector("#userId").value)
+    };
+
+    const response = await fetch("/address/add", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      alert("주소가 등록되었습니다.");
+      window.location.href = "/address/list";
+    } else {
+      const errorText = await response.text();
+      alert("주소 등록 실패: " + errorText);
+    }
+  }
+</script>
+
+<a href="/address/list">목록으로</a>
+</body>
+</html>

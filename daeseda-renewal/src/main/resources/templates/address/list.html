@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>주소 목록</title>
+</head>
+<body>
+<h2>주소 목록</h2>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>이름</th>
+    <th>상세 주소</th>
+    <th>우편번호</th>
+    <th>도로명 주소</th>
+    <th>기본 주소</th>
+    <th>삭제</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="address : ${addresses}">
+    <td th:text="${address.addressId}"></td>
+    <td th:text="${address.addressName}"></td>
+    <td th:text="${address.addressDetail}"></td>
+    <td th:text="${address.addressZipcode}"></td>
+    <td th:text="${address.addressRoad}"></td>
+    <td th:text="${address.defaultAddress} ? 'Y' : 'N'"></td>
+    <td>
+      <form th:action="@{/address/delete}" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <input type="hidden" name="orderId" th:value="${address.addressId}"/>
+        <input type="hidden" name="userId" value="1"/>
+        <button type="submit">삭제</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<a href="/address/form">주소 추가</a>
+</body>
+</html>
