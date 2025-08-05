@@ -1,4 +1,3 @@
-<!-- templates/address/form.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,55 +7,63 @@
 <body>
 <h2>주소 등록 (Fetch 기반)</h2>
 
-<!-- 기존 form 제거 → JS 기반으로 처리 -->
-<div>
+<form id="addressForm">
   <label>주소 이름:</label>
-  <input type="text" id="addressName"/><br/>
+  <input type="text" id="addressName" name="addressName" required/><br/>
 
   <label>주소 상세:</label>
-  <input type="text" id="addressDetail"/><br/>
+  <input type="text" id="addressDetail" name="addressDetail" required/><br/>
 
   <label>우편번호:</label>
-  <input type="text" id="addressZipcode"/><br/>
+  <input type="text" id="addressZipcode" name="addressZipcode" required/><br/>
 
   <label>도로명 주소:</label>
-  <input type="text" id="addressRoad"/><br/>
+  <input type="text" id="addressRoad" name="addressRoad" required/><br/>
 
   <label>기본 주소로 설정:</label>
-  <input type="checkbox" id="defaultAddress"/><br/>
+  <input type="checkbox" id="defaultAddress" name="defaultAddress"/><br/>
 
-  <input type="hidden" id="userId" value="1"/>
+  <input type="hidden" id="userId" name="userId" th:value="${session.userId}"/>
 
-  <button onclick="submitAddress()">등록</button>
-</div>
+  <button type="submit">등록</button>
+</form>
 
 <script>
-  async function submitAddress() {
-    const data = {
-      addressName: document.querySelector("#addressName").value,
-      addressDetail: document.querySelector("#addressDetail").value,
-      addressZipcode: document.querySelector("#addressZipcode").value,
-      addressRoad: document.querySelector("#addressRoad").value,
-      defaultAddress: document.querySelector("#defaultAddress").checked,
-      userId: Number(document.querySelector("#userId").value)
-    };
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("addressForm");
 
-    const response = await fetch("/address/add", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data)
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault(); // 기본 제출 막기
+
+      const data = {
+        addressName: document.querySelector("#addressName").value,
+        addressDetail: document.querySelector("#addressDetail").value,
+        addressZipcode: document.querySelector("#addressZipcode").value,
+        addressRoad: document.querySelector("#addressRoad").value,
+        defaultAddress: document.querySelector("#defaultAddress").checked,
+        userId: Number(document.querySelector("#userId").value)
+      };
+
+      try {
+        const response = await fetch("/api/address/add", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert("주소가 등록되었습니다.");
+          window.location.href = "/address/list";
+        } else {
+          const errorText = await response.text();
+          alert("주소 등록 실패: " + errorText);
+        }
+      } catch (err) {
+        console.error("요청 실패:", err);
+        alert("에러 발생. 다시 시도해주세요.");
+      }
     });
-
-    if (response.ok) {
-      alert("주소가 등록되었습니다.");
-      window.location.href = "/address/list";
-    } else {
-      const errorText = await response.text();
-      alert("주소 등록 실패: " + errorText);
-    }
-  }
+  });
 </script>
-
-<a href="/address/list">목록으로</a>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.experiment.daeseda_renewal.domain.address;
 import com.experiment.daeseda_renewal.constant.ErrorCode;
 import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
+import com.experiment.daeseda_renewal.domain.address.dto.DeleteAddressRequest;
 import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,14 +54,14 @@ public class AddressServiceImpl implements AddressService {
   }
 
   @Override
-  public void delete(Long addressId, Long userId) {
+  public void delete(DeleteAddressRequest request) {
 
-    Address address = addressRepository.findById(addressId)
+    Address address = addressRepository.findById(request.getAddressId())
                                        .orElseThrow(
                                            () -> new BusinessException(ErrorCode.ADDR_NOT_FOUND));
 
     if (!address.getUserId()
-                .equals(userId)) {
+                .equals(request.getUserId())) {
       throw new BusinessException(ErrorCode.ADDR_DELETE_FORBIDDEN);
     }
 

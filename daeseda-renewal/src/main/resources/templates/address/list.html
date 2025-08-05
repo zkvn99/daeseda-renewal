@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>주소 목록</title>
+  <meta charset="UTF-8">
 </head>
 <body>
 <h2>주소 목록</h2>
@@ -27,17 +28,46 @@
     <td th:text="${address.addressRoad}"></td>
     <td th:text="${address.defaultAddress} ? 'Y' : 'N'"></td>
     <td>
-      <form th:action="@{/address/delete}" method="post">
-        <input type="hidden" name="_method" value="delete"/>
-        <input type="hidden" name="orderId" th:value="${address.addressId}"/>
-        <input type="hidden" name="userId" value="1"/>
-        <button type="submit">삭제</button>
-      </form>
+      <button type="button"
+              class="delete-btn"
+              th:data-address-id="${address.addressId}"
+              th:data-user-id="${address.userId}">
+        삭제
+      </button>
     </td>
   </tr>
   </tbody>
 </table>
-
+<a href="/">홈으로 이동</a>
 <a href="/address/form">주소 추가</a>
+
+<script>
+  document.querySelectorAll(".delete-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+      const addressId = this.dataset.addressId;
+      const userId = this.dataset.userId;
+
+      try {
+        const response = await fetch("/api/address/delete", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({addressId, userId})
+        });
+
+        if (response.ok) {
+          // 삭제 후 목록 새로고침
+          window.location.href = "/address/list";
+        } else {
+          alert("주소 삭제 실패");
+        }
+      } catch (error) {
+        console.error("삭제 중 오류:", error);
+        alert("통신 오류 발생");
+      }
+    });
+  });
+</script>
 </body>
 </html>
