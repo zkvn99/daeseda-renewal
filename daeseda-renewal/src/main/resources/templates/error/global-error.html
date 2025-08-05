@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>시스템 오류</title>
+</head>
+<body>
+<h2>🚨 시스템 오류가 발생했습니다</h2>
+<p th:text="'오류 내용: ' + ${errorMessage}"></p>
+
+<a href="/">홈으로 이동</a>
+</body>
+</html>

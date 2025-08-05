@@ -38,24 +38,28 @@
 </head>
 
 <body>
-  <form action="/users/password-reset" method="post">
-    <h3>비밀번호 찾기</h3>
-    <div class="page-button-wrapper">
-      <a href="/users/find-id" class="page-button other-page">아이디 찾기</a>
-      <a href="/users/find-pw" class="page-button now-page">비밀번호 찾기</a>
-    </div>
-    <div class="email-input-box-wrapper">
-      <input type="email" name="email" id="email" placeholder="이메일을 입력하세요" class="email-input input-box">
-      <button type="button" onclick="mailAuthentication()" class="check-duplicate-button">이메일 인증</button>
+<form action="/users/password-reset" method="post">
+  <h3>비밀번호 찾기</h3>
+  <div class="page-button-wrapper">
+    <a href="/users/find-id" class="page-button other-page">아이디 찾기</a>
+    <a href="/users/find-pw" class="page-button now-page">비밀번호 찾기</a>
+  </div>
+  <div class="email-input-box-wrapper">
+    <input type="email" name="email" id="email" placeholder="이메일을 입력하세요"
+           class="email-input input-box">
+    <button type="button" onclick="mailAuthentication()" class="check-duplicate-button">이메일 인증
+    </button>
 
-      <p class="email-message"></p>
-    </div>
-    <div class="password-input-box-wrapper">
-      <input type="password" name="password" id="password" placeholder="패스워드를 입력하세요" class="password-input input-box">
-      <p class="password-massage"></p>
-    </div>
-    <button type="submit" class="find-button">비밀번호 변경</button>
-  </form>
+    <p class="email-message"></p>
+  </div>
+  <div class="password-input-box-wrapper">
+    <input type="password" name="password" id="password" placeholder="패스워드를 입력하세요"
+           class="password-input input-box">
+    <p class="password-massage"></p>
+  </div>
+  <button type="submit" class="find-button">비밀번호 변경</button>
+</form>
+<a href="/">홈으로 이동</a>
 </body>
 
 </html>

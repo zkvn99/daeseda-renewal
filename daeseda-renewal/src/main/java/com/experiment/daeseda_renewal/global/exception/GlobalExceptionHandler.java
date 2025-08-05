@@ -18,8 +18,7 @@ public class GlobalExceptionHandler {
     ErrorCode errorCode = ex.getErrorCode();
     model.addAttribute("errorMessage", errorCode.getMessage());
     log.error("로직 예외 발생", ex);
-    System.out.println("GlobalExceptionHandler.handleException");
-    return "error/address-error";
+    return "error/error";
   }
 
   @ExceptionHandler(Exception.class)

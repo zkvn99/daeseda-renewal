@@ -2,22 +2,29 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>로그인</title>
 </head>
 
 <body>
-<form action="/users/login" method="post" class="login-form">
+<form id="loginForm" class="login-form">
   <section class="login-section">
     <h3 class="login-title">로그인</h3>
+
     <div class="input-wrapper">
-      <input type="email" placeholder="이메일" class="input email-input" name="email">
+      <input type="email" placeholder="이메일" class="input email-input" name="email" required/>
     </div>
+
     <div class="input-wrapper">
-      <input type="password" placeholder="비밀번호" class="input password-input" name="password">
+      <input type="password" placeholder="비밀번호" class="input password-input" name="password"
+             required/>
     </div>
+
+    <p id="errorMessage" style="color: red; font-size: 0.9em;"></p>
+
     <button type="submit" class="login-button">로그인</button>
+
     <div class="other-button">
       <a href="/users/find-id">아이디 찾기</a>
       <a href="/users/find-pw">비밀번호 찾기</a>
@@ -25,6 +32,37 @@
     </div>
   </section>
 </form>
+
+<script>
+  document.getElementById("loginForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.querySelector(".email-input").value;
+    const password = document.querySelector(".password-input").value;
+    const errorMessage = document.getElementById("errorMessage");
+
+    try {
+      const response = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email, password}),
+      });
+
+      if (response.ok) {
+        // 로그인 성공 시 리디렉션
+        window.location.href = "/";
+      } else {
+        const result = await response.json();
+        errorMessage.textContent = result.message || "로그인 실패. 다시 시도해주세요.";
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      errorMessage.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+    }
+  });
+</script>
 </body>
 
 </html>

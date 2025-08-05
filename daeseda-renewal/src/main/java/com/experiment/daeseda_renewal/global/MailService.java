@@ -1,14 +1,16 @@
-package com.experiment.daeseda_renewal.service.mail;
+package com.experiment.daeseda_renewal.global;
 
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-
 import java.io.UnsupportedEncodingException;
 
 public interface MailService {
 
-    MimeMessage createMessage(String message, String verificationCode) throws MessagingException, UnsupportedEncodingException;
-    String generateKey();
-    String sendMessage(String email) throws Exception;
+  MimeMessage createMessage(String message, String verificationCode)
+      throws MessagingException, UnsupportedEncodingException;
+
+  String generateKey();
+
+  String sendMessage(String email) throws Exception;
 }
