@@ -1,12 +1,16 @@
 package com.experiment.daeseda_renewal.domain.user;
 
+import com.experiment.daeseda_renewal.domain.user.dto.CreateUserRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginResponse;
+
 public interface UserService {
 
-  void signUp(UserDto userDTO);
+  void signUp(CreateUserRequest request);
 
   void signOut();
 
-  UserDto login(UserDto userDTO);
+  LoginResponse login(LoginRequest request);
 
   String findEmailByName(String name);
 

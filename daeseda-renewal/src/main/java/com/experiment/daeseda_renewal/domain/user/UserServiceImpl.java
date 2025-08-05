@@ -1,6 +1,9 @@
 package com.experiment.daeseda_renewal.domain.user;
 
 import com.experiment.daeseda_renewal.constant.ErrorCode;
+import com.experiment.daeseda_renewal.domain.user.dto.CreateUserRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginResponse;
 import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +18,16 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public void signUp(UserDto userDTO) {
+  public void signUp(CreateUserRequest request) {
 
-    if (userRepository.existsByEmail(userDTO.getEmail())) {
+    if (userRepository.existsByEmail(request.getEmail())) {
       throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
     }
 
     User user = User.builder()
-                    .name(userDTO.getName())
-                    .email(userDTO.getEmail())
-                    .password(passwordEncoder.encode(userDTO.getPassword()))
+                    .name(request.getName())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
                     .build();
 
     userRepository.save(user);
@@ -35,15 +38,19 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserDto login(UserDto userDTO) {
-    User user = userRepository.findByEmail(userDTO.getEmail())
+  public LoginResponse login(LoginRequest request) {
+    User user = userRepository.findByEmail(request.getEmail())
                               .orElseThrow(
                                   () -> new BusinessException(ErrorCode.LOGIN_VALID_FAILED));
-    if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
       throw new BusinessException(ErrorCode.LOGIN_VALID_FAILED);
     }
 
-    return UserDto.fromUser(user);
+    return LoginResponse.builder()
+                        .userId(user.getId())
+                        .email(user.getEmail())
+                        .name(user.getName())
+                        .build();
   }
 
   @Override

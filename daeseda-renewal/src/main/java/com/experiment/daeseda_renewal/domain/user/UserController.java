@@ -1,5 +1,6 @@
 package com.experiment.daeseda_renewal.domain.user;
 
+import com.experiment.daeseda_renewal.domain.user.dto.CreateUserRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,8 @@ public class UserController {
   }
 
   @PostMapping("/signup")
-  public String signup(@ModelAttribute UserDto userDTO) {
-    userService.signUp(userDTO);
+  public String signup(@ModelAttribute CreateUserRequest request) {
+    userService.signUp(request);
     return "redirect:/user/signup-complete";
   }
 
@@ -32,19 +33,7 @@ public class UserController {
   public String loginForm() {
     return "/user/login";
   }
-
-  @PostMapping("/login")
-  public String login(@ModelAttribute UserDto userDTO, HttpSession session) {
-    UserDto loginResult = userService.login(userDTO);
-    if (loginResult != null) {
-      session.setAttribute("userId", loginResult.getId());
-      session.setAttribute("email", loginResult.getEmail());
-      session.setAttribute("name", loginResult.getName());
-      return "redirect:/";
-    } else {
-      return "/user/login";
-    }
-  }
+  
 
   @GetMapping("/logout")
   public String logout(HttpSession session) {
