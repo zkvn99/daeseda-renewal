@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LoginRequest {
+public class ResetUserPasswordRequest {
 
   private String userEmail;
   private String userPassword;

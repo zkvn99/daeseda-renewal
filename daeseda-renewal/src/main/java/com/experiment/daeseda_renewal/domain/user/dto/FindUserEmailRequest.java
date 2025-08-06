@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LoginRequest {
+public class FindUserEmailRequest {
 
-  private String userEmail;
-  private String userPassword;
+  private String userName;
+  private String userPhone;
 }
