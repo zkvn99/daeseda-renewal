@@ -12,8 +12,6 @@ public interface UserService {
 
   void signUp(CreateUserRequest request);
 
-  void signOut();
-
   LoginResponse login(LoginRequest request);
 
   String findUserEmail(FindUserEmailRequest request);
@@ -23,6 +21,6 @@ public interface UserService {
   void delete(DeleteUserRequest request);
 
   boolean verifyUserBeforePasswordReset(VerifyUserPasswordResetRequest request);
-  
+
   void resetUserPassword(ResetUserPasswordRequest request);
 }
