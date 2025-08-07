@@ -54,6 +54,9 @@ public enum ErrorCode {
   LOGIN_VALID_FAILED("USER-LOGIN-001", "이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED,
                      LogLevel.INFO),
   USER_NOT_FOUND("USER-FIND-001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND, LogLevel.INFO),
+  USER_ID_MISMATCH("USER-DELETE-001", "요청 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST, LogLevel.INFO),
+  USER_PASSWORD_NOT_MATCH("USER-DELETE-002", "비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED,
+                          LogLevel.INFO),
 
   // 주문 관련 에러코드 (ORDER)
   ORDER_NOT_FOUND("ORDER_FIND_001", "주문을 찾을 수 없습니다.", HttpStatus.NOT_FOUND, LogLevel.INFO);
