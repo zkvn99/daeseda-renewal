@@ -31,7 +31,7 @@ public class UserController {
 
   @GetMapping("/my-page")
   public String myPage(HttpSession session) {
-    if (session.getAttribute("email") == null) {
+    if (session.getAttribute("userId") == null) {
       return "redirect:/login";  // 로그인 상태가 아니면 로그인 페이지로 리디렉션
     }
     return "/user/my-page";  // 마이페이지를 반환

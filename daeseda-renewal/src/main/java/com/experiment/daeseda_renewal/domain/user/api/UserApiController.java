@@ -2,6 +2,7 @@ package com.experiment.daeseda_renewal.domain.user.api;
 
 import com.experiment.daeseda_renewal.domain.user.UserService;
 import com.experiment.daeseda_renewal.domain.user.dto.CreateUserRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.DeleteUserRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.FindUserEmailRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.LoginRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.LoginResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +45,7 @@ public class UserApiController {
     if (loginResult != null) {
       session.setAttribute("userId", loginResult.getUserId());
       session.setAttribute("userNickname", loginResult.getUserNickname());
+      session.setAttribute("userEmail", loginResult.getUserEmail());
       return ResponseEntity.ok("로그인 성공");
     } else {
       return ResponseEntity.badRequest()
@@ -81,6 +84,12 @@ public class UserApiController {
   public ResponseEntity<String> resetUserPassword(@RequestBody ResetUserPasswordRequest request) {
     userService.resetUserPassword(request);
     return ResponseEntity.ok("비밀번호 변경이 완료되었습니다.");
+  }
+
+  @DeleteMapping("/delete")
+  public ResponseEntity<String> delete(@RequestBody DeleteUserRequest request) {
+    userService.delete(request);
+    return ResponseEntity.ok("회원 삭제가 완료되었습니다.");
   }
 
 //  @PostMapping("/mail-authentication")
