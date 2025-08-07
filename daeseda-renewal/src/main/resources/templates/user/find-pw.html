@@ -1,65 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>비밀번호 찾기</title>
-  <script>
-    async function mailAuthentication() {
-      const emailInput = document.querySelector(".email-input");
-      const email = emailInput.value;
-      const message = document.querySelector(".email-message");
-
-      if (!email) {
-        message.textContent = "이메일을 입력해주세요.";
-        message.style.color = "red";
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/users/check-email?email=${email}`);
-        const result = await response.json();
-
-        if (result.duplicate) {
-          message.textContent = "이미 사용 중인 이메일입니다.";
-          message.style.color = "red";
-        } else {
-          message.textContent = "사용 가능한 이메일입니다.";
-          message.style.color = "green";
-        }
-      } catch (error) {
-        console.error("Error checking email:", error);
-        message.textContent = "오류 발생. 다시 시도해주세요.";
-        message.style.color = "red";
-      }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .hidden {
+      display: none;
     }
-  </script>
+
+    .message {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body>
-<form action="/users/password-reset" method="post">
-  <h3>비밀번호 찾기</h3>
-  <div class="page-button-wrapper">
-    <a href="/users/find-id" class="page-button other-page">아이디 찾기</a>
-    <a href="/users/find-pw" class="page-button now-page">비밀번호 찾기</a>
-  </div>
-  <div class="email-input-box-wrapper">
-    <input type="email" name="email" id="email" placeholder="이메일을 입력하세요"
-           class="email-input input-box">
-    <button type="button" onclick="mailAuthentication()" class="check-duplicate-button">이메일 인증
-    </button>
+<h3>비밀번호 재설정</h3>
 
-    <p class="email-message"></p>
-  </div>
-  <div class="password-input-box-wrapper">
-    <input type="password" name="password" id="password" placeholder="패스워드를 입력하세요"
-           class="password-input input-box">
-    <p class="password-massage"></p>
-  </div>
-  <button type="submit" class="find-button">비밀번호 변경</button>
-</form>
+<!-- STEP 1: 사용자 검증 -->
+<div id="verify-section">
+  <input type="text" class="name-input" placeholder="이름 입력"/><br/>
+  <input type="email" class="email-input" placeholder="이메일 입력"/><br/>
+  <input type="text" class="phone-input" placeholder="전화번호 입력"/><br/>
+  <p class="verify-message message"></p>
+  <button onclick="verifyUser()">사용자 확인</button>
+</div>
+
+<!-- STEP 2: 비밀번호 재설정 -->
+<div id="reset-section" class="hidden">
+  <input type="email" class="reset-email-input" readonly/><br/>
+  <input type="password" class="password-input" placeholder="새 비밀번호 입력"/><br/>
+  <p class="reset-message message"></p>
+  <button onclick="resetPassword()">비밀번호 변경</button>
+</div>
+
 <a href="/">홈으로 이동</a>
-</body>
 
+<script>
+  async function verifyUser() {
+    const name = document.querySelector('.name-input').value.trim();
+    const email = document.querySelector('.email-input').value.trim();
+    const phone = document.querySelector('.phone-input').value.trim();
+    const message = document.querySelector('.verify-message');
+
+    if (!name || !email || !phone) {
+      message.textContent = '모든 정보를 입력해주세요.';
+      message.style.color = 'red';
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/users/verify-for-reset', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          userName: name,
+          userEmail: email,
+          userPhone: phone
+        })
+      });
+
+      if (response.ok) {
+        message.textContent = '사용자 확인 완료. 비밀번호를 재설정하세요.';
+        message.style.color = 'green';
+
+        // email 값을 reset-section에 채우고 UI 전환
+        document.querySelector('.reset-email-input').value = email;
+        document.getElementById('verify-section').classList.add('hidden');
+        document.getElementById('reset-section').classList.remove('hidden');
+      } else {
+        const text = await response.text();
+        message.textContent = text || '사용자 정보가 일치하지 않습니다.';
+        message.style.color = 'red';
+      }
+    } catch (err) {
+      console.error(err);
+      message.textContent = '오류가 발생했습니다.';
+      message.style.color = 'red';
+    }
+  }
+
+  async function resetPassword() {
+    const email = document.querySelector('.reset-email-input').value.trim();
+    const password = document.querySelector('.password-input').value.trim();
+    const message = document.querySelector('.reset-message');
+
+    if (!email || !password) {
+      message.textContent = '비밀번호를 입력해주세요.';
+      message.style.color = 'red';
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/users/reset-password', {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          userEmail: email,
+          userPassword: password
+        })
+      });
+
+      if (response.ok) {
+        alert("비밀번호가 성공적으로 변경되었습니다.")
+        window.location.href = "/"
+      } else {
+        const text = await response.text();
+        message.textContent = text || '비밀번호 변경 실패';
+        message.style.color = 'red';
+      }
+    } catch (err) {
+      console.error(err);
+      message.textContent = '서버 오류 발생';
+      message.style.color = 'red';
+    }
+  }
+</script>
+</body>
 </html>

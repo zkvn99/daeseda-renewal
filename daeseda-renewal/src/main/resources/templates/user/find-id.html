@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +7,64 @@
 </head>
 
 <body>
-<form action="/users/find-id" method="post">
+<form id="findIdForm">
   <h3>아이디 찾기</h3>
   <div class="page-button-wrapper">
     <a href="/users/find-id" class="page-button now-page">아이디 찾기</a>
     <a href="/users/find-pw" class="page-button other-page">비밀번호 찾기</a>
   </div>
+
   <div class="input-box-wrapper">
     <div class="name-input-wrapper">
-      <i class="fa-regular fa-user input-icon name-icon"></i>
-      <input type="text" name="name" placeholder="이름" class="input-box name-input">
+      <input type="text" id="name" name="name" placeholder="이름" class="input-box name-input">
     </div>
-    <p class="result-message find-button" th:classappend="${email != null ? '' : ' hidden'}">
-      <span th:text="${email}"></span>
+    <div class="phone-input-wrapper">
+      <input type="text" id="phone" name="phone" placeholder="전화번호"
+             class="input-box phone-input">
+    </div>
+    <p class="result-message find-button hidden" id="result">
+      <span id="emailResult"></span>
     </p>
   </div>
+
   <button type="submit" class="find-button">아이디 찾기</button>
 </form>
-<a href="/">홈으로 이동</a>
-</body>
 
+<a href="/">홈으로 이동</a>
+
+<script>
+  document.getElementById('findIdForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+
+    try {
+      const response = await fetch('/api/users/find-id', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({userName: name, userPhone: phone})
+      });
+
+      if (!response.ok) {
+        throw new Error('사용자를 찾을 수 없습니다.');
+      }
+
+      const email = await response.text();
+      document.getElementById('emailResult').textContent = email;
+      document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+</script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+</body>
 </html>

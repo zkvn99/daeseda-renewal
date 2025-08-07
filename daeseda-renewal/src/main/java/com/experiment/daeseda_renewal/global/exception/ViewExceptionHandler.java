@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class ViewExceptionHandler {
 
-  private final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+  private final Logger log = LoggerFactory.getLogger(ViewExceptionHandler.class);
 
-  // 비즈니스 예외 핸들러
   @ExceptionHandler(BusinessException.class)
   public String handleException(BusinessException ex, Model model) {
     ErrorCode errorCode = ex.getErrorCode();
