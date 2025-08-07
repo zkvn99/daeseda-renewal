@@ -39,14 +39,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void signOut() {
-  }
-
-  @Override
   public LoginResponse login(LoginRequest request) {
     User user = userRepository.findByUserEmail(request.getUserEmail())
                               .orElseThrow(
                                   () -> new BusinessException(ErrorCode.LOGIN_VALID_FAILED));
+
     if (!passwordEncoder.matches(request.getUserPassword(), user.getUserPassword())) {
       throw new BusinessException(ErrorCode.LOGIN_VALID_FAILED);
     }
@@ -74,7 +71,17 @@ public class UserServiceImpl implements UserService {
   public void delete(DeleteUserRequest request) {
     User user = userRepository.findByUserEmail(request.getUserEmail())
                               .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-    userRepository.deleteById(user.getUserId());
+
+    if (!user.getUserId()
+             .equals(request.getUserId())) {
+      throw new BusinessException(ErrorCode.USER_ID_MISMATCH);
+    }
+
+    if (!passwordEncoder.matches(request.getUserPassword(), user.getUserPassword())) {
+      throw new BusinessException(ErrorCode.USER_PASSWORD_NOT_MATCH);
+    }
+
+    userRepository.delete(user);
   }
 
   @Override
