@@ -42,6 +42,18 @@
            class="input password-input"/>
   </div>
 
+  <!-- 닉네임 -->
+  <div class="input-wrapper">
+    <i class="fa-regular fa-user icon name-icon"></i>
+    <input type="text" placeholder="닉네임" name="nickname" required class="input nickname-input"/>
+  </div>
+
+  <!-- 전화번호 -->
+  <div class="input-wrapper">
+    <i class="fa-regular fa-user icon name-icon"></i>
+    <input type="text" placeholder="전화번호" name="phone" required class="input phone-input"/>
+  </div>
+
   <!-- 제출 버튼 -->
   <button type="submit" class="submit-button">가입하기</button>
 
@@ -85,9 +97,11 @@
   document.getElementById("signupForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const name = document.querySelector(".name-input").value;
-    const email = document.querySelector(".email-input").value;
-    const password = document.querySelector(".password-input").value;
+    const userName = document.querySelector(".name-input").value;
+    const userEmail = document.querySelector(".email-input").value;
+    const userPassword = document.querySelector(".password-input").value;
+    const userNickname = document.querySelector(".nickname-input").value;
+    const userPhone = document.querySelector(".phone-input").value;
     const statusMessage = document.getElementById("statusMessage");
 
     try {
@@ -96,7 +110,7 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({name, email, password}),
+        body: JSON.stringify({userName, userEmail, userPassword, userNickname, userPhone}),
       });
 
       if (response.ok) {
