@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class VerifyUserPasswordResetRequest {
 
-  private String userName;
-  private String userEmail;
-  private String userPhone;
+  private final String userName;
+  private final String userEmail;
+  private final String userPhone;
 }

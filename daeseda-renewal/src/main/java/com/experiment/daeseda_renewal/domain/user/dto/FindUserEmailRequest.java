@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class FindUserEmailRequest {
 
-  private String userName;
-  private String userPhone;
+  private final String userName;
+  private final String userPhone;
 }

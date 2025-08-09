@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class ResetUserPasswordRequest {
 
-  private String userEmail;
-  private String userPassword;
+  private final String userEmail;
+  private final String userPassword;
 }

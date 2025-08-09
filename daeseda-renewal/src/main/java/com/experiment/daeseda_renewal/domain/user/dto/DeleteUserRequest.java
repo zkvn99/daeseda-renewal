@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class DeleteUserRequest {
 
-  private Long userId;
-  private String userEmail;
-  private String userPassword;
+  private final Long userId;
+  private final String userEmail;
+  private final String userPassword;
 }
