@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class UserController {
 
-  private final UserService userService;
-
   @GetMapping("/signup")
   public String signupForm() {
     return "/user/signup";
