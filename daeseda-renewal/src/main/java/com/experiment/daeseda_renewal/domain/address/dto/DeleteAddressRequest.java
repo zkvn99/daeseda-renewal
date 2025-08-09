@@ -4,9 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class DeleteAddressRequest {
 
-  private Long userId;
-  private Long addressId;
+  private final Long userId;
+  private final Long addressId;
+
+  @Builder
+  public DeleteAddressRequest(Long userId, Long addressId) {
+    this.userId = userId;
+    this.addressId = addressId;
+  }
 }
