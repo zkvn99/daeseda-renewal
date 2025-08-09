@@ -1,7 +1,9 @@
 package com.experiment.daeseda_renewal.domain.order;
 
+import com.experiment.daeseda_renewal.domain.order.dto.CreateOrderRequest;
+
 public interface OrderService {
-    OrderDto createOrder(OrderDto orderDto);
+    void createOrder(CreateOrderRequest request);
 
     OrderDto getOrderByOrderId(Long orderId);
 

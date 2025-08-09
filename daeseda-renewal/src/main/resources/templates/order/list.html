@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 목록</title>
+</head>
+<body>
+<h2>주문 목록</h2>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>주문 ID</th>
+    <th>등록일시</th>
+    <th>수정일시</th>
+    <th>배송일</th>
+    <th>픽업일시</th>
+    <th>주문 상태</th>
+    <th>총 금액</th>
+    <th>세탁 방식</th>
+    <th>회원 ID</th>
+    <th>주소 ID</th>
+    <th>삭제</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.orderId}"></td>
+    <td th:text="${order.regTime}"></td>
+    <td th:text="${order.modTime}"></td>
+    <td th:text="${order.deliveryDate}"></td>
+    <td th:text="${order.pickupDate}"></td>
+    <td th:text="${order.orderStatus}"></td>
+    <td th:text="${order.totalPrice}"></td>
+    <td th:text="${order.washingMethod}"></td>
+    <td th:text="${order.userId}"></td>
+    <td th:text="${order.addressId}"></td>
+    <td>
+      <button type="button"
+              class="delete-btn"
+              th:data-order-id="${order.orderId}">
+        삭제
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<a href="/">홈으로 이동</a>
+<a href="/order/form">주문 추가</a>
+
+<script>
+  document.querySelectorAll(".delete-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+      const orderId = this.dataset.orderId;
+
+      try {
+        const response = await fetch("/api/order/delete", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ orderId })
+        });
+
+        if (response.ok) {
+          window.location.href = "/order/list";
+        } else {
+          alert("주문 삭제 실패");
+        }
+      } catch (error) {
+        console.error("삭제 중 오류:", error);
+        alert("통신 오류 발생");
+      }
+    });
+  });
+</script>
+</body>
+</html>
