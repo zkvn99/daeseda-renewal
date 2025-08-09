@@ -48,7 +48,7 @@
       const userId = this.dataset.userId;
 
       try {
-        const response = await fetch("/api/address/delete", {
+        const response = await fetch("/api/addresses/delete", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json"
@@ -58,7 +58,7 @@
 
         if (response.ok) {
           // 삭제 후 목록 새로고침
-          window.location.href = "/address/list";
+          window.location.href = "/addresses/list";
         } else {
           alert("주소 삭제 실패");
         }
