@@ -12,15 +12,18 @@ import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
   @Override
+  @Transactional
   public void signUp(CreateUserRequest request) {
 
     if (userRepository.existsByUserEmail(request.getUserEmail())) {
@@ -68,6 +71,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public void delete(DeleteUserRequest request) {
     User user = userRepository.findByUserEmail(request.getUserEmail())
                               .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
@@ -94,10 +98,10 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public void resetUserPassword(ResetUserPasswordRequest request) {
     User user = userRepository.findByUserEmail(request.getUserEmail())
                               .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     user.updatePassword(passwordEncoder.encode(request.getUserPassword()));
-    userRepository.save(user);
   }
 }
