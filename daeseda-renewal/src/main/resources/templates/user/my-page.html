@@ -1,11 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>마이페이지</title>
 </head>
 <body>
-    <h1>마이페이지</h1>
-    <p>환영합니다, <span th:text="${session.name}"></span>님!</p>
+<h1>마이페이지</h1>
+
+<p>환영합니다, <span th:text="${session.userNickname}"></span>님!</p>
+
+<!-- 탈퇴 폼 -->
+<div>
+  <h3>회원 탈퇴</h3>
+  <input type="email" id="email" placeholder="이메일 입력">
+  <input type="password" id="password" placeholder="비밀번호 입력">
+
+  <!-- userId를 숨겨서 세션 값 기반으로 설정 -->
+  <input type="hidden" id="userId" th:value="${session.userId}">
+
+  <button onclick="deleteUser()">탈퇴하기</button>
+  <p id="delete-result" style="color: red;"></p>
+</div>
+
+<a href="/">홈으로 이동</a>
+
+<script>
+  async function deleteUser() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const userId = document.getElementById("userId").value;
+    const resultMsg = document.getElementById("delete-result");
+
+    if (!email || !password) {
+      resultMsg.textContent = "이메일과 비밀번호를 모두 입력해주세요.";
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/users/delete", {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          userEmail: email,
+          userPassword: password,
+          userId: userId
+        })
+      });
+
+      if (response.ok) {
+        alert("회원 탈퇴가 완료되었습니다.");
+        location.href = "/users/logout"; // 로그아웃 처리
+      } else {
+        const errorText = await response.text();
+        resultMsg.textContent = errorText || "탈퇴 실패. 다시 시도해주세요.";
+      }
+    } catch (err) {
+      console.error("탈퇴 요청 실패:", err);
+      resultMsg.textContent = "서버 오류. 관리자에게 문의해주세요.";
+    }
+  }
+</script>
 </body>
 </html>

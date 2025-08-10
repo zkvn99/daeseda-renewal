@@ -40,21 +40,14 @@ daeseda-renewal/
 ## 코드 규칙
 | 항목               | 규칙                                                                       |
 | ---------------- | ------------------------------------------------------------------------ |
-| **Entity / DTO** | setter 금지, builder 생성, 불변성 유지                                            |
-| **DTO**          | 요청/응답 분리, 검증은 Request에만 적용 (`@Valid`)                                    |
+| **DTO** | setter 금지, builder 생성, 불변성 유지 (향후 record로 변경 고려), 요청/응답 분리                 |
 | **Service**      | interface 기반, 구현은 Impl로 명확히 분리                                           |
-| **트랜잭션**         | 구현체의 메서드에 `@Transactional` 명시 (`readOnly=true` 기본)                       |
-| **Controller**   | View 이름 반환, `Model` 또는 `RedirectAttributes`로 데이터 전달                      |
-| **Exception 처리** | `@ControllerAdvice`로 공통 처리, 필요 시 redirect + flash 처리                     |
-| **Entity 생성 책임** | DTO의 `toEntity()` 또는 ServiceImpl 내부에서 명확히 분리                             |
-| **DTO 네이밍**      | `CreateXxxRequest`, `UpdateXxxRequest`, `XxxView`, `XxxListItem` 등 목적 기반 |
-| **패키지 구조**       | 도메인 기반 계층 분리 (`domain.xxx.controller`, `dto`, `entity`, ...)             |
-| **Entity 생성자 관리**       | `@NoArgsConstructor(access = PROTECTED)` + `@Builder`로 객체 생성 제한          |
+| **Transaction**    | 구현체의 메서드에 `@Transactional` 명시 (`readOnly=true` 기본)                       |
+| **Controller**   | RestController와 일반 Controller 분리, DB 접근 시 전부 RestController                 |
+| **Exception 처리** | `@ControllerAdvice` 및 @RestControllerAdvice로 공통 처리, 필요 시 redirect + flash 처리  |
+| **Entity** | 데이터 변경이 필요한 경우 entity 내부 메서드로 변경 처리 setter 사용 x, 생성은 Builder 패턴       |
+| **패키지 구조**   | 도메인 기반 계층 분리 (`domain.xxx.controller`, `dto`, `entity`, ...)             |
 
-## 리뷰 규칙
- - 리뷰 전 : 코드 커밋 전에 스스로 점검 - 기능 정상 동작 확인, 불필요한 코드 제거 (디버깅용 console.log, System.out.println)
- - PR 제목 및 설명은 명확히 작성 : 주요 변경 사항 및 리뷰 포인트 명시 (ex : [기능] 로그인 로직 구현, [버그] 예외처리 누락 수정)
- - 리뷰어의 리뷰 규칙 : 논리적 오류 및 예외처리 누락 확인, 불필요하거나 중복된 코드 제거 권고, 코딩 컨벤션 준수, 변수 및 함수명 검토, 성능/효율성 고려, 테스트 코드 또는 확인 방법 존재 여부 확인
- - 승인/요청 조건 : 1명 이상 승인 시 Merge 가능, 변경 요청 시 구체적 이유와 해결 방향 함께 제시
- - 금지 사항 : 기능 구현 외 리팩토링 혼합 커밋 금지 (PR은 단일 목적만)
+## 네이밍 규칙
+| ** CRUD 네이밍 **  | 새 리소스 생성 - Create, 단건 조회 get, 목록 조회 list, 조건 검색 search - Read, 전체 갱신 update, 부분 갱신 patch - Update, 리소스 삭제 - Delete |
 

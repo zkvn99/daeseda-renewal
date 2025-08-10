@@ -3,8 +3,7 @@ package com.experiment.daeseda_renewal.domain.address;
 import com.experiment.daeseda_renewal.constant.ErrorCode;
 import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
 import com.experiment.daeseda_renewal.domain.address.dto.CreateAddressRequest;
-import com.experiment.daeseda_renewal.domain.user.User;
-import com.experiment.daeseda_renewal.domain.user.UserRepository;
+import com.experiment.daeseda_renewal.domain.address.dto.DeleteAddressRequest;
 import com.experiment.daeseda_renewal.global.exception.BusinessException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,22 +15,22 @@ import org.springframework.stereotype.Service;
 public class AddressServiceImpl implements AddressService {
 
   private final AddressRepository addressRepository;
-  private final UserRepository userRepository;
 
   @Override
-  public void createAddress(CreateAddressRequest addressDto) {
+  public void createAddress(CreateAddressRequest request) {
     boolean exists = addressRepository.existsByAddressZipcodeAndAddressDetail(
-        addressDto.getAddressZipcode(), addressDto.getAddressDetail());
+        request.getAddressZipcode(), request.getAddressDetail());
 
     if (exists) {
       throw new BusinessException(ErrorCode.DUPLICATE_ADDR);
     }
 
     Address address = Address.builder()
-                             .addressDetail(addressDto.getAddressDetail())
-                             .addressZipcode(addressDto.getAddressZipcode())
-                             .addressName(addressDto.getAddressName())
-                             .addressRoad(addressDto.getAddressRoad())
+                             .addressDetail(request.getAddressDetail())
+                             .addressZipcode(request.getAddressZipcode())
+                             .addressName(request.getAddressName())
+                             .addressRoad(request.getAddressRoad())
+                             .userId(request.getUserId())
                              .build();
 
     addressRepository.save(address);
@@ -40,10 +39,7 @@ public class AddressServiceImpl implements AddressService {
   @Override
   public List<AddressResponse> getMyAddressList(Long userId) {
 
-    User user = userRepository.findById(userId)
-                              .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
-    List<Address> addressList = addressRepository.findByUser(user);
+    List<Address> addressList = addressRepository.findByUserId(userId);
 
     return addressList.stream()
                       .map(address -> AddressResponse.builder()
@@ -52,22 +48,23 @@ public class AddressServiceImpl implements AddressService {
                                                      .addressZipcode(address.getAddressZipcode())
                                                      .addressName(address.getAddressName())
                                                      .addressRoad(address.getAddressRoad())
-                                                     .userId(user.getId())
+                                                     .userId(address.getUserId())
                                                      .build())
                       .collect(Collectors.toList());
   }
 
   @Override
-  public void delete(Long addressId, Long userId) {
+  public void delete(DeleteAddressRequest request) {
 
-    Address address = addressRepository.findById(addressId)
+    Address address = addressRepository.findById(request.getAddressId())
                                        .orElseThrow(
                                            () -> new BusinessException(ErrorCode.ADDR_NOT_FOUND));
-    if (!address.getUser()
-                .getId()
-                .equals(userId)) {
+
+    if (!address.getUserId()
+                .equals(request.getUserId())) {
       throw new BusinessException(ErrorCode.ADDR_DELETE_FORBIDDEN);
     }
+
     addressRepository.delete(address);
   }
 }
