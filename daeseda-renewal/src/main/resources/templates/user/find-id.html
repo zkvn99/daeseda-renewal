@@ -10,8 +10,8 @@
 <form id="findIdForm">
   <h3>아이디 찾기</h3>
   <div class="page-button-wrapper">
-    <a href="/users/find-id" class="page-button now-page">아이디 찾기</a>
-    <a href="/users/find-pw" class="page-button other-page">비밀번호 찾기</a>
+    <a th:href="@{/users/find-id}" class="page-button now-page">아이디 찾기</a>
+    <a th:href="@{/users/find-pw}" class="page-button other-page">비밀번호 찾기</a>
   </div>
 
   <div class="input-box-wrapper">
@@ -30,7 +30,7 @@
   <button type="submit" class="find-button">아이디 찾기</button>
 </form>
 
-<a href="/">홈으로 이동</a>
+<a th:href="@{/}">홈으로 이동</a>
 
 <script>
   document.getElementById('findIdForm').addEventListener('submit', async function (e) {
