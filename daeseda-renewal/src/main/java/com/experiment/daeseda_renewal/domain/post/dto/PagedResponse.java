@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.domain.board.dto;
+package com.experiment.daeseda_renewal.domain.post.dto;
 
 import java.util.List;
 import lombok.Builder;

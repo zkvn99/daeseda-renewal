@@ -1,15 +1,15 @@
-package com.experiment.daeseda_renewal.domain.board.api;
+package com.experiment.daeseda_renewal.domain.post.api;
 
-import com.experiment.daeseda_renewal.domain.board.PostService;
-import com.experiment.daeseda_renewal.domain.board.dto.PagedResponse;
-import com.experiment.daeseda_renewal.domain.board.dto.PostCreateRequest;
-import com.experiment.daeseda_renewal.domain.board.dto.PostResponse;
-import com.experiment.daeseda_renewal.domain.board.dto.PostUpdateRequest;
+import com.experiment.daeseda_renewal.domain.post.PostService;
+import com.experiment.daeseda_renewal.domain.post.dto.PostCreateRequest;
+import com.experiment.daeseda_renewal.domain.post.dto.PostResponse;
+import com.experiment.daeseda_renewal.domain.post.dto.PostUpdateRequest;
 import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,43 +28,31 @@ public class PostApiController {
 
   private final PostService postService;
 
-  @GetMapping
-  public PagedResponse<PostResponse> list(
+  @GetMapping("/api/posts")
+  public Page<PostResponse> listPosts(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
-      @RequestParam(required = false) String q,
-      @RequestParam(defaultValue = "latest") String sort
+      @RequestParam(required = false) String q
+//      @RequestParam(defaultValue = "latest") String sort
   ) {
-    Sort s = switch (sort) {
-      case "oldest" -> Sort.by("id")
-                           .ascending();
-      case "mostViewed" -> Sort.by(Sort.Direction.DESC, "views", "id");
-      default -> Sort.by("id")
-                     .descending();
-    };
-    PageRequest pr = PageRequest.of(page, size, s);
-    Page<PostResponse> result = postService.searchPosts(q, pr);
-    return PagedResponse.of(result);
-  }
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id")
+                                                       .descending());
 
-  @GetMapping("/{id}")
-  public PostResponse get(@PathVariable Long id,
-      @RequestParam(defaultValue = "false") boolean increaseViews) {
-    return increaseViews ? postService.getAndIncreaseViews(id) : postService.getPost(id);
+    return postService.searchPosts(q, pageable);
   }
 
   @PostMapping
-  public PostResponse create(@Valid @RequestBody PostCreateRequest req) {
+  public PostResponse add(@Valid @RequestBody PostCreateRequest req) {
     return postService.createPost(req);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/{id:\\\\d+}")
   public PostResponse update(@PathVariable Long id,
       @Valid @RequestBody PostUpdateRequest req) {
     return postService.updatePost(id, req);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{id:\\\\d+}")
   public Map<String, Object> delete(@PathVariable Long id) {
     postService.deletePost(id);
     return Map.of("success", true);

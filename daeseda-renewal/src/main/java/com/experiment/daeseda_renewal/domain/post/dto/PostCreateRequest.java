@@ -1,11 +1,11 @@
-package com.experiment.daeseda_renewal.domain.board.dto;
+package com.experiment.daeseda_renewal.domain.post.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class PostUpdateRequest {
+public class PostCreateRequest {
 
   private final String postTitle;
   private final String postContent;

@@ -1,8 +1,8 @@
-package com.experiment.daeseda_renewal.domain.board;
+package com.experiment.daeseda_renewal.domain.post;
 
-import com.experiment.daeseda_renewal.domain.board.dto.PostCreateRequest;
-import com.experiment.daeseda_renewal.domain.board.dto.PostResponse;
-import com.experiment.daeseda_renewal.domain.board.dto.PostUpdateRequest;
+import com.experiment.daeseda_renewal.domain.post.dto.PostCreateRequest;
+import com.experiment.daeseda_renewal.domain.post.dto.PostResponse;
+import com.experiment.daeseda_renewal.domain.post.dto.PostUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

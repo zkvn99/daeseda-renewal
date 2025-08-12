@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.domain.board;
+package com.experiment.daeseda_renewal.domain.post;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
