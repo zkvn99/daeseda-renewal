@@ -1,4 +1,4 @@
-package com.experiment.daeseda_renewal.domain.board;
+package com.experiment.daeseda_renewal.domain.post;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/posts")
 public class PostController {
 
-  @GetMapping
-  public String listPage() {
+  @GetMapping("/list")
+  public String postList() {
     return "/post/list";
   }
 
-  @GetMapping("/new")
-  public String createPage() {
+  @GetMapping("/form")
+  public String postForm() {
     return "/post/form";
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id:\\\\d+}")
   public String detailPage(@PathVariable Long id) {
     return "/post/detail";
   }
 
-  @GetMapping("/{id}/edit")
+  @GetMapping("/{id:\\\\d+}/edit")
   public String editPage(@PathVariable Long id) {
-    return "/form";
+    return "/post/form";
   }
 }

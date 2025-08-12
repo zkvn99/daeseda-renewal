@@ -32,7 +32,12 @@
     </div>
   </section>
 </form>
-
+<script th:inline="javascript">
+  const alertMsg = /*[[${alertMsg}]]*/ null;
+  if (alertMsg) {
+    alert(alertMsg);
+  }
+</script>
 <script>
   document.getElementById("loginForm").addEventListener("submit", async function (e) {
     e.preventDefault();

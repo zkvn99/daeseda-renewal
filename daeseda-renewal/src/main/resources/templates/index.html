@@ -12,15 +12,20 @@
 
 <body>
 대세다 리뉴얼 (자동 배포 테스트)
-<a th:if="${session.userId == null}" href="/users/login">로그인</a>
-<a th:if="${session.userId == null}" href="/users/signup">회원가입</a>
+<th:block th:if="${session.userId == null}">
+  <a th:href="@{/users/login}">로그인</a>
+  <a th:href="@{/users/signup}">회원가입</a>
+</th:block>
 
-<a th:if="${session.userId != null}" href="/addresses/form">주소 등록</a>
-<a th:if="${session.userId != null}" href="/addresses/list">주소 리스트</a>
-<a th:if="${session.userId != null}" href="/users/logout">로그아웃</a>
-<a th:if="${session.userId != null}" href="/users/my-page">마이페이지</a>
-<a th:if="${session.userId != null}" href="/cart/list">장바구니</a>
-<a th:if="${session.userId != null}" href="/products/list">상품목록</a>
+<th:block th:if="${session.userId != null}">
+  <a th:href="@{/addresses/form}">주소 등록</a>
+  <a th:href="@{/addresses/list}">주소 리스트</a>
+  <a th:href="@{/users/logout}">로그아웃</a>
+  <a th:href="@{/users/my-page}">마이페이지</a>
+  <a th:href="@{/cart/list}">장바구니</a>
+  <a th:href="@{/products/list}">상품목록</a>
+  <a th:href="@{/posts/list}">게시판 보기</a>
+</th:block>
 </body>
 
 </html>
