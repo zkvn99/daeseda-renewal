@@ -3,6 +3,7 @@ package com.experiment.daeseda_renewal.domain.post;
 import com.experiment.daeseda_renewal.domain.post.dto.PostCreateRequest;
 import com.experiment.daeseda_renewal.domain.post.dto.PostResponse;
 import com.experiment.daeseda_renewal.domain.post.dto.PostUpdateRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginUserSnapshot;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +15,7 @@ public interface PostService {
 
   PostResponse getAndIncreaseViews(Long postId);
 
-  PostResponse createPost(PostCreateRequest request);
+  PostResponse createPost(PostCreateRequest request, LoginUserSnapshot user);
 
   PostResponse updatePost(Long postId, PostUpdateRequest request);
 

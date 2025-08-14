@@ -15,11 +15,6 @@
     </div>
 
     <div>
-      <label>작성자</label>
-      <input type="hidden" name="userNickname" id="userNickname" th:value="${session.userNickname}/>
-    </div>
-
-    <div>
       <label>내용</label>
       <textarea name="postContent" rows="12" required></textarea>
     </div>
@@ -34,8 +29,7 @@
 <script>
   async function httpJson(url, opt = {}) {
     const res = await fetch(url, {
-      headers: {'Content-Type': 'application/json', ...(opt.headers || {})},
-      credentials: 'same-origin',
+      headers: {'Content-Type': 'application/json'},
       ...opt
     });
     if (!res.ok) {
@@ -76,8 +70,10 @@
         await httpJson(`/api/posts/${id}`, {method: 'PUT', body});
         location.href = `/posts/${id}`;
       } else {
-        const res = await httpJson('/api/posts', {method: 'POST', body});
-        location.href = `/posts/${res.id}`;
+        alert('시도');
+        await httpJson('/api/posts', {method: 'POST', body});
+        alert('성공');
+        location.href = `/posts/list`;
       }
     } catch (err) {
       alert('저장 실패: ' + err.message);

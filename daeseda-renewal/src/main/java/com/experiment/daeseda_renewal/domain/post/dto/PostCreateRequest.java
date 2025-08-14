@@ -9,5 +9,4 @@ public class PostCreateRequest {
 
   private final String postTitle;
   private final String postContent;
-  private final String userNickname;
 }

@@ -3,6 +3,7 @@ package com.experiment.daeseda_renewal.domain.post;
 import com.experiment.daeseda_renewal.domain.post.dto.PostCreateRequest;
 import com.experiment.daeseda_renewal.domain.post.dto.PostResponse;
 import com.experiment.daeseda_renewal.domain.post.dto.PostUpdateRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginUserSnapshot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,11 +41,12 @@ public class PostServiceImpl implements PostService {
 
   @Override
   @Transactional
-  public PostResponse createPost(PostCreateRequest request) {
+  public PostResponse createPost(PostCreateRequest request, LoginUserSnapshot user) {
     Post p = Post.builder()
                  .postTitle(request.getPostTitle())
                  .postContent(request.getPostContent())
-                 .userNickname(request.getUserNickname())
+                 .userNickname(user.userNickname())
+                 .userId(user.userId())
                  .views(0L)
                  .build();
     return toDto(postRepository.save(p));

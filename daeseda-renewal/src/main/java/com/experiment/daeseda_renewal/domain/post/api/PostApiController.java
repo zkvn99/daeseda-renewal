@@ -4,9 +4,13 @@ import com.experiment.daeseda_renewal.domain.post.PostService;
 import com.experiment.daeseda_renewal.domain.post.dto.PostCreateRequest;
 import com.experiment.daeseda_renewal.domain.post.dto.PostResponse;
 import com.experiment.daeseda_renewal.domain.post.dto.PostUpdateRequest;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginUserSnapshot;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/posts/")
+@RequestMapping("/api/posts")
 public class PostApiController {
 
+  private final Logger log = LoggerFactory.getLogger(PostApiController.class);
   private final PostService postService;
 
-  @GetMapping("/api/posts")
+  @GetMapping
   public Page<PostResponse> listPosts(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
@@ -42,8 +47,9 @@ public class PostApiController {
   }
 
   @PostMapping
-  public PostResponse add(@Valid @RequestBody PostCreateRequest req) {
-    return postService.createPost(req);
+  public PostResponse add(@Valid @RequestBody PostCreateRequest req, HttpSession session) {
+    LoginUserSnapshot user = (LoginUserSnapshot) session.getAttribute("LOGIN_USER");
+    return postService.createPost(req, user);
   }
 
   @PutMapping("/{id:\\\\d+}")
