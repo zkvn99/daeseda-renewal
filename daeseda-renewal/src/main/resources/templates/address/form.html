@@ -24,7 +24,7 @@
   <label>기본 주소로 설정:</label>
   <input type="checkbox" id="defaultAddress" name="defaultAddress"/><br/>
 
-  <input type="hidden" id="userId" name="userId" th:value="${session.userId}"/>
+  <input type="hidden" id="userId" name="userId" th:value="${session.LOGIN_USER.userId()}"/>
 
   <button type="submit">등록</button>
 </form>

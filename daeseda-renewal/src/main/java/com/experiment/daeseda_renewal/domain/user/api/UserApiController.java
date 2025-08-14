@@ -6,6 +6,7 @@ import com.experiment.daeseda_renewal.domain.user.dto.DeleteUserRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.FindUserEmailRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.LoginRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.LoginResponse;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginUserSnapshot;
 import com.experiment.daeseda_renewal.domain.user.dto.ResetUserPasswordRequest;
 import com.experiment.daeseda_renewal.domain.user.dto.VerifyUserPasswordResetRequest;
 import jakarta.servlet.http.HttpSession;
@@ -43,9 +44,9 @@ public class UserApiController {
   public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpSession session) {
     LoginResponse loginResult = userService.login(request);
     if (loginResult != null) {
-      session.setAttribute("userId", loginResult.getUserId());
-      session.setAttribute("userNickname", loginResult.getUserNickname());
-      session.setAttribute("userEmail", loginResult.getUserEmail());
+      session.setAttribute("LOGIN_USER", new LoginUserSnapshot(loginResult.getUserId(),
+                                                               loginResult.getUserNickname(),
+                                                               loginResult.getUserEmail()));
       return ResponseEntity.ok("로그인 성공");
     } else {
       return ResponseEntity.badRequest()

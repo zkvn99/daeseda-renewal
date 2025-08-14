@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 
 <head>
   <meta charset="UTF-8">
@@ -12,12 +11,12 @@
 
 <body>
 대세다 리뉴얼 (자동 배포 테스트)
-<th:block th:if="${session.userId == null}">
+<th:block th:if="${session.LOGIN_USER == null}">
   <a th:href="@{/users/login}">로그인</a>
   <a th:href="@{/users/signup}">회원가입</a>
 </th:block>
 
-<th:block th:if="${session.userId != null}">
+<th:block th:if="${session.LOGIN_USER != null}">
   <a th:href="@{/addresses/form}">주소 등록</a>
   <a th:href="@{/addresses/list}">주소 리스트</a>
   <a th:href="@{/users/logout}">로그아웃</a>

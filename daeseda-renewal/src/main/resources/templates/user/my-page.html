@@ -7,7 +7,7 @@
 <body>
 <h1>마이페이지</h1>
 
-<p>환영합니다, <span th:text="${session.userNickname}"></span>님!</p>
+<p>환영합니다, <span th:text="${session.LOGIN_USER.userNickname()}"></span>님!</p>
 
 <!-- 탈퇴 폼 -->
 <div>
@@ -16,7 +16,7 @@
   <input type="password" id="password" placeholder="비밀번호 입력">
 
   <!-- userId를 숨겨서 세션 값 기반으로 설정 -->
-  <input type="hidden" id="userId" th:value="${session.userId}">
+  <input type="hidden" id="userId" th:value="${session.LOGIN_USER.userId()}">
 
   <button onclick="deleteUser()">탈퇴하기</button>
   <p id="delete-result" style="color: red;"></p>
