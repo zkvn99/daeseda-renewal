@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>주문 등록</title>
+  <meta charset="UTF-8" />
+</head>
+<body>
+<h2>주문 등록</h2>
+
+<form id="orderForm">
+  <label>배송 날짜:</label>
+  <input type="date" id="deliveryDate" name="deliveryDate" required /><br/>
+
+  <label>주소 선택:</label>
+  <select id="addressId" name="addressId" required>
+    <option value="" disabled selected>주소를 선택하세요</option>
+    <th:block th:each="address : ${addresses}">
+      <option th:value="${address.addressId}" th:text="${address.addressRoad+address.addressName}"></option>
+    </th:block>
+  </select><br/>
+
+  <label for="orderStatus">주문 상태 선택:</label>
+  <select name="orderStatus" id="orderStatus">
+    <option value="" disabled selected>상태를 선택하세요</option>
+    <th:block th:each="status : ${orderStatus}">
+      <option th:value="${status}" th:text="${status.name()}"></option>
+    </th:block>
+  </select><br/>
+
+  <label>총 가격:</label>
+  <input type="number" id="totalPrice" name="totalPrice" step="0.01" required /><br/>
+
+  <label for="washingMethod">세탁 방법 선택:</label>
+  <select name="washingMethod" id="washingMethod">
+    <option value="" disabled selected>세탁 방법을 선택하세요</option>
+    <th:block th:each="method : ${washingMethods}">
+      <option th:value="${method}" th:text="${method.name()}"></option>
+    </th:block>
+  </select>
+
+  <input type="hidden" id="userId" name="userId" th:value="${session.userId}" />
+
+  <button type="submit">주문 등록</button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("orderForm");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const data = {
+        userId: Number(document.querySelector("#userId").value),
+        addressId: Number(document.querySelector("#addressId").value),
+        deliveryDate: document.querySelector("#deliveryDate").value,
+        orderStatus: document.querySelector("#orderStatus").value,
+        totalPrice: parseFloat(document.querySelector("#totalPrice").value),
+        washingMethod: document.querySelector("#washingMethod").value
+      };
+
+      try {
+        const response = await fetch("/api/orders/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert("주문이 등록되었습니다.");
+          window.location.href = "/orders/form";
+        } else {
+          const errorText = await response.text();
+          alert("주문 등록 실패: " + errorText);
+        }
+      } catch (err) {
+        console.error("요청 실패:", err);
+        alert("에러 발생. 다시 시도해주세요.");
+      }
+    });
+  });
+</script>
+</body>
+</html>
