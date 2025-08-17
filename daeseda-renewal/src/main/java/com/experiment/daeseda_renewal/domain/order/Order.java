@@ -78,4 +78,7 @@ public class Order {
         this.totalPrice = dto.getTotalPrice();
         this.washingMethod = dto.getWashingMethod();
     }
+    public void cancelOrder() {
+        this.orderStatus = OrderStatus.CANCEL;
+    }
 }

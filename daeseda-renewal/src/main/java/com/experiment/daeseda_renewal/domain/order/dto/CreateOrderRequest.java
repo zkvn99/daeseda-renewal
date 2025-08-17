@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class CreateOrderRequest {
     private final Long userId;
     private final Long addressId;
-    private final LocalDate deliveryDate;
+    private final String deliveryDate;
     private final String orderStatus;
     private final String washingMethod;
     private final BigDecimal totalPrice;

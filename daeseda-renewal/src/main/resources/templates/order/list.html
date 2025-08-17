@@ -11,8 +11,6 @@
   <thead>
   <tr>
     <th>주문 ID</th>
-    <th>등록일시</th>
-    <th>수정일시</th>
     <th>배송일</th>
     <th>픽업일시</th>
     <th>주문 상태</th>
@@ -20,26 +18,24 @@
     <th>세탁 방식</th>
     <th>회원 ID</th>
     <th>주소 ID</th>
-    <th>삭제</th>
+    <th>주문 취소</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each="order : ${orders}">
     <td th:text="${order.orderId}"></td>
-    <td th:text="${order.regTime}"></td>
-    <td th:text="${order.modTime}"></td>
     <td th:text="${order.deliveryDate}"></td>
-    <td th:text="${order.pickupDate}"></td>
+    <td th:text="${order.pickupDate != null} ? ${#temporals.format(order.pickupDate, 'yyyy-MM-dd HH:mm:ss')} : '미정'"></td>
     <td th:text="${order.orderStatus}"></td>
     <td th:text="${order.totalPrice}"></td>
     <td th:text="${order.washingMethod}"></td>
-    <td th:text="${order.userId}"></td>
-    <td th:text="${order.addressId}"></td>
+    <td th:text="${order.userName}"></td>
+    <td th:text="${order.address}"></td>
     <td>
       <button type="button"
-              class="delete-btn"
+              class="cancel-btn"
               th:data-order-id="${order.orderId}">
-        삭제
+        주문 취소
       </button>
     </td>
   </tr>
@@ -50,13 +46,13 @@
 <a href="/order/form">주문 추가</a>
 
 <script>
-  document.querySelectorAll(".delete-btn").forEach(button => {
+  document.querySelectorAll(".cancel-btn").forEach(button => {
     button.addEventListener("click", async function () {
       const orderId = this.dataset.orderId;
 
       try {
-        const response = await fetch("/api/order/delete", {
-          method: "DELETE",
+        const response = await fetch("/api/orders/cancel", {
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json"
           },
@@ -64,9 +60,9 @@
         });
 
         if (response.ok) {
-          window.location.href = "/order/list";
+          window.location.href = "/orders/list";
         } else {
-          alert("주문 삭제 실패");
+          alert("주문 취소 실패");
         }
       } catch (error) {
         console.error("삭제 중 오류:", error);

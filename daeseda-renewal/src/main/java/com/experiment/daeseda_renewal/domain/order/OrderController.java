@@ -36,7 +36,7 @@ public class OrderController {
     @GetMapping("/list")
     public String list(Model model, HttpSession session) {
 
-        List<OrderResponse> orders = orderService.getOrderByOrderId((Long)session.getAttribute("userId"));
+        List<OrderResponse> orders = orderService.getMyOrderList((Long)session.getAttribute("userId"));
         model.addAttribute("orders", orders);
         return "/order/list";
     }
