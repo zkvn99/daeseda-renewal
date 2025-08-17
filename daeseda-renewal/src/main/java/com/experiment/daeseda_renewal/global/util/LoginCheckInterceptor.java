@@ -23,7 +23,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
       throws Exception {
 
     HttpSession session = req.getSession(false);
-    boolean loggedIn = (session != null && session.getAttribute("userId") != null); // 실제 키로!
+    boolean loggedIn = (session != null && session.getAttribute("LOGIN_USER") != null);
     if (loggedIn) {
       return true;
     }
