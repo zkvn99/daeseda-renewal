@@ -1,6 +1,7 @@
     package com.experiment.daeseda_renewal.domain.order;
 
     import com.experiment.daeseda_renewal.constant.OrderStatus;
+    import com.experiment.daeseda_renewal.constant.WashingMethod;
     import lombok.AllArgsConstructor;
     import lombok.Builder;
     import lombok.Getter;
@@ -27,7 +28,7 @@
 
         private BigDecimal totalPrice;
 
-        private String washingMethod;
+        private WashingMethod washingMethod;
 
         //이친구들은 외래키임
         //일단 연관관계 생략
