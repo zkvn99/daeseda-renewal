@@ -11,5 +11,7 @@ public class PostResponse {
   private final String postTitle;
   private final String postContent;
   private final String userNickname;
+  private final String createdAt;
+  private final String updatedAt;
   private final Long views;
 }

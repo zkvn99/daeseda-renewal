@@ -40,4 +40,6 @@ public class Address extends BaseTimeEntity {
   @Column
   private Long userId;
 
+  @Column
+  private boolean defaultAddress;
 }

@@ -50,7 +50,6 @@
       $title.textContent = '글 수정';
       const p = await httpJson(`/api/posts/${id}`);
       $f.postTitle.value = p.postTitle;
-      $f.userNickname.value = p.userNickname;
       $f.postContent.value = p.postContent;
     } else {
       $title.textContent = '새 글 쓰기';
@@ -61,7 +60,6 @@
     e.preventDefault();
     const body = JSON.stringify({
       postTitle: $f.postTitle.value.trim(),
-      userNickname: $f.userNickname.value.trim(),
       postContent: $f.postContent.value.trim()
     });
 

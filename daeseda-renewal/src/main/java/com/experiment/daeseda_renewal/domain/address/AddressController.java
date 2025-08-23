@@ -1,6 +1,7 @@
 package com.experiment.daeseda_renewal.domain.address;
 
 import com.experiment.daeseda_renewal.domain.address.dto.AddressResponse;
+import com.experiment.daeseda_renewal.domain.user.dto.LoginUserSnapshot;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ public class AddressController {
 
   @GetMapping("/list")
   public String list(Model model, HttpSession session) {
-    List<AddressResponse> addresses = addressService.getMyAddressList(
-        (Long) session.getAttribute("userId"));
+    LoginUserSnapshot user = (LoginUserSnapshot) session.getAttribute("LOGIN_USER");
+    List<AddressResponse> addresses = addressService.getMyAddressList(user.userId());
     model.addAttribute("addresses", addresses);
     return "/address/list";
   }

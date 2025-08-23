@@ -1,5 +1,6 @@
 package com.experiment.daeseda_renewal.domain.user;
 
+import com.experiment.daeseda_renewal.domain.user.dto.LoginUserSnapshot;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,8 @@ public class UserController {
 
   @GetMapping("/my-page")
   public String myPage(HttpSession session) {
-    if (session.getAttribute("userId") == null) {
+    LoginUserSnapshot user = (LoginUserSnapshot) session.getAttribute("LOGIN_USER");
+    if (user == null) {
       return "redirect:/login";  // 로그인 상태가 아니면 로그인 페이지로 리디렉션
     }
     return "/user/my-page";  // 마이페이지를 반환

@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,19 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/posts")
 public class PostApiController {
 
-  private final Logger log = LoggerFactory.getLogger(PostApiController.class);
   private final PostService postService;
 
   @GetMapping
   public Page<PostResponse> listPosts(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
-      @RequestParam(required = false) String q
-//      @RequestParam(defaultValue = "latest") String sort
+      @RequestParam(required = false) String q,
+      @RequestParam(defaultValue = "latest") String sort
   ) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("id")
                                                        .descending());
-
     return postService.searchPosts(q, pageable);
   }
 

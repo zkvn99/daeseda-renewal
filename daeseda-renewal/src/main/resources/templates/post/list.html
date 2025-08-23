@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><title>게시글 목록</title></head>
+<head>
+  <title>게시글 목록</title>
+  <link rel="shortcut icon" href="#">
+</head>
 <body>
 <section>
   <div class="d-flex justify-content-between align-items-center mb-3">
@@ -39,12 +42,11 @@
     <table class="table table-hover align-middle" id="listTable">
       <thead class="table-light">
       <tr>
-        <th style="width:8%">번호</th>
+        <th style="width:8%">글번호</th>
         <th>제목</th>
         <th style="width:18%">작성자</th>
         <th style="width:22%">작성일</th>
         <th style="width:10%" class="text-end">조회</th>
-        <th style="width:12%" class="text-end">관리</th>
       </tr>
       </thead>
       <tbody></tbody>
@@ -60,21 +62,31 @@
     const $tb = document.querySelector('#listTable tbody');
     const $pg = document.getElementById('pager');
 
-    // 초기 폼 값 = URL 파라미터
+    async function httpJson(url, options = {}) {
+      const res = await fetch(url, {credentials: 'same-origin', ...options});
+      const ct = res.headers.get('content-type') || '';
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(`HTTP ${res.status} ${res.statusText}\n${text}`);
+      }
+      return ct.includes('application/json') ? res.json() : Promise.reject(new Error('Not JSON'));
+    }
+
     const init = () => {
-      const p = URLH.params();
+      const p = new URLSearchParams(location.search);
       $f.q.value = p.get('q') || '';
       $f.sort.value = p.get('sort') || 'latest';
       $f.size.value = p.get('size') || '10';
     };
 
-    let page = Number(URLH.params().get('page') || 0);
+    let page = Number(new URLSearchParams(location.search).get('page') || 0);
 
     $f.addEventListener('submit', (e) => {
       e.preventDefault();
       page = 0;
       navigate();
     });
+
     document.getElementById('resetBtn').onclick = () => {
       $f.q.value = '';
       $f.sort.value = 'latest';
@@ -84,59 +96,53 @@
     };
 
     function navigate() {
-      const url = URLH.toQuery({q: $f.q.value, sort: $f.sort.value, size: $f.size.value, page});
-      history.pushState({}, '', url);
+      const params = new URLSearchParams({
+        q: $f.q.value.trim(),
+        sort: $f.sort.value,
+        size: $f.size.value,
+        page
+      });
+      history.pushState({}, '', `?${params.toString()}`);
       load();
     }
 
     window.addEventListener('popstate', () => {
       init();
-      page = Number(URLH.params().get('page') || 0);
+      page = Number(new URLSearchParams(location.search).get('page') || 0);
       load();
     });
 
     async function load() {
-      const params = new URLSearchParams(
-          {page, size: $f.size.value, q: $f.q.value, sort: $f.sort.value});
-      const data = await httpJson(`/api/posts?${params.toString()}`);
-      render(data);
+      const params = new URLSearchParams({
+        page,
+        size: $f.size.value,
+        q: $f.q.value.trim(),
+        sort: $f.sort.value
+      });
+
+      try {
+        const data = await httpJson(`/api/posts?${params.toString()}`);
+        render(data);
+      } catch (e) {
+        $tb.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">조회 실패</td></tr>`;
+        $pg.innerHTML = '';
+      }
     }
 
     function render(data) {
-      const fmt = (iso) => new Date(iso).toLocaleString();
+      const fmt = (iso) => iso ? new Date(iso).toLocaleString() : '';
 
-      // 본문
       $tb.innerHTML = data.content.length
           ? data.content.map(p => `
-            <tr>
-              <td>${p.id}</td>
-              <td><a class="text-decoration-none" href="/posts/${p.id}">${p.postTitle}</a></td>
-              <td>${p.userNickname}</td>
-              <td class="text-end">${p.views}</td>
-              <td class="text-end">
-                <button class="btn btn-sm btn-outline-danger" data-del="${p.id}">삭제</button>
-              </td>
-            </tr>`).join('')
-          : `<tr><td colspan="6" class="text-center py-5 text-muted">게시글이 없습니다.</td></tr>`;
+        <tr>
+          <td>${p.postId}</td>
+          <td><a class="text-decoration-none" href="/posts/${p.postId}">${p.postTitle}</a></td>
+          <td>${p.userNickname}</td>
+          <td>${fmt(p.createdAt)}</td>
+          <td class="text-end">${p.views}</td>
+        </tr>`).join('')
+          : `<tr><td colspan="5" class="text-center py-5 text-muted">게시글이 없습니다.</td></tr>`;
 
-      // 삭제 버튼
-      $tb.querySelectorAll('button[data-del]').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.getAttribute('data-del');
-          if (!confirm('삭제하시겠습니까?')) {
-            return;
-          }
-          try {
-            await httpJson(`/api/posts/${id}`, {method: 'DELETE'});
-            toast('삭제되었습니다.');
-            load();
-          } catch (e) {
-            toast('삭제 실패: ' + e.message);
-          }
-        };
-      });
-
-      // 페이저
       $pg.innerHTML = '';
       const add = (disabled, text, toPage) => {
         const li = document.createElement('li');
@@ -151,6 +157,7 @@
         }
         $pg.appendChild(li);
       };
+
       add(data.first, '이전', data.number - 1);
       for (let i = 0; i < data.totalPages; i++) {
         const li = document.createElement('li');
@@ -169,6 +176,7 @@
     init();
     load();
   </script>
+
 </section>
 </body>
 </html>
