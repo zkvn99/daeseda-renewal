@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>주문 목록</title>
+</head>
+<body>
+<h2>배송 상세 정보</h2>
+<table border="1">
+  <thead>
+  <tr>
+    <th>주문 코드</th>
+    <th>배송자</th>
+    <th>전화번호</th>
+    <th>주소</th>
+    <th>배송 예정일</th>
+    <th>배송 상태</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td th:text="${delivery.order.orderId}"></td>
+    <td th:text="${delivery.user.userName}"></td>
+    <td th:text="${delivery.user.userPhone}"></td>
+    <td th:text="${delivery.address.addressDetail}"></td>
+    <td th:text="${delivery.order.deliveryDate}"></td>
+    <td th:text="${delivery.deliveryStatus}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

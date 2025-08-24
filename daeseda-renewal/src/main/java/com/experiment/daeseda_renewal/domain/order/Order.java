@@ -3,6 +3,7 @@ package com.experiment.daeseda_renewal.domain.order;
 import com.experiment.daeseda_renewal.constant.OrderStatus;
 import com.experiment.daeseda_renewal.constant.WashingMethod;
 import com.experiment.daeseda_renewal.domain.address.Address;
+import com.experiment.daeseda_renewal.domain.order.dto.UpdateOrderRequest;
 import com.experiment.daeseda_renewal.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,16 +15,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
@@ -66,11 +65,11 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    public void updateFromDto(OrderDto dto) {
+    public void updateFromDto(UpdateOrderRequest dto) {
         this.modTime = LocalDateTime.now();
         this.deliveryDate = dto.getDeliveryDate();
         this.pickupDate = dto.getPickupDate();
@@ -78,7 +77,12 @@ public class Order {
         this.totalPrice = dto.getTotalPrice();
         this.washingMethod = dto.getWashingMethod();
     }
+
     public void cancelOrder() {
         this.orderStatus = OrderStatus.CANCEL;
+    }
+
+    public void cashOrder() {
+        this.orderStatus = OrderStatus.CASH;
     }
 }

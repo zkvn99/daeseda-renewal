@@ -1,12 +1,16 @@
 package com.experiment.daeseda_renewal.domain.order;
 
+import com.experiment.daeseda_renewal.constant.DeliveryStatus;
 import com.experiment.daeseda_renewal.constant.ErrorCode;
 import com.experiment.daeseda_renewal.constant.OrderStatus;
 import com.experiment.daeseda_renewal.constant.WashingMethod;
 import com.experiment.daeseda_renewal.domain.address.Address;
 import com.experiment.daeseda_renewal.domain.address.AddressRepository;
+import com.experiment.daeseda_renewal.domain.delivery.Delivery;
+import com.experiment.daeseda_renewal.domain.delivery.DeliveryRepository;
 import com.experiment.daeseda_renewal.domain.order.dto.CreateOrderRequest;
 import com.experiment.daeseda_renewal.domain.order.dto.OrderResponse;
+import com.experiment.daeseda_renewal.domain.order.dto.UpdateOrderRequest;
 import com.experiment.daeseda_renewal.domain.user.User;
 import com.experiment.daeseda_renewal.domain.user.UserRepository;
 import com.experiment.daeseda_renewal.global.exception.BusinessException;
@@ -26,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final DeliveryRepository deliveryRepository;
 
     @Override
     @Transactional
@@ -79,22 +84,39 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto updateOrderByOrderId(Long orderId, OrderDto orderDto) {
+    public void cashOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                                     .orElseThrow(
+                                         () -> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
+        order.cashOrder();
+
+        Delivery delivery = Delivery.builder()
+                                    .order(order)
+                                    .user(order.getUser())
+                                    .address(order.getAddress())
+                                    .deliveryStatus(DeliveryStatus.PROCESSING)
+                                    .build();
+        deliveryRepository.save(delivery);
+    }
+
+    @Override
+    @Transactional
+    public UpdateOrderRequest updateOrderByOrderId(Long orderId, UpdateOrderRequest orderDto) {
         Order order = orderRepository.findById(orderId)
                                      .orElseThrow(
                                          () -> new BusinessException(ErrorCode.ORDER_NOT_FOUND));
 
         order.updateFromDto(orderDto);
 
-        return OrderDto.builder()
-                       .orderId(order.getOrderId())
-                       .regTime(order.getRegTime())
-                       .modTime(order.getModTime())
-                       .deliveryDate(order.getDeliveryDate())
-                       .pickupDate(order.getPickupDate())
-                       .orderStatus(order.getOrderStatus())
-                       .totalPrice(order.getTotalPrice())
-                       .washingMethod(order.getWashingMethod())
-                       .build();
+        return UpdateOrderRequest.builder()
+                                 .orderId(order.getOrderId())
+                                 .regTime(order.getRegTime())
+                                 .modTime(order.getModTime())
+                                 .deliveryDate(order.getDeliveryDate())
+                                 .pickupDate(order.getPickupDate())
+                                 .orderStatus(order.getOrderStatus())
+                                 .totalPrice(order.getTotalPrice())
+                                 .washingMethod(order.getWashingMethod())
+                                 .build();
     }
 }

@@ -19,6 +19,8 @@
     <th>회원 ID</th>
     <th>주소 ID</th>
     <th>주문 취소</th>
+    <th>결제 완료</th>
+    <th>배송 상세 보기</th>
   </tr>
   </thead>
   <tbody>
@@ -36,6 +38,18 @@
               class="cancel-btn"
               th:data-order-id="${order.orderId}">
         주문 취소
+      </button>
+    </td>
+    <td>
+      <button type="button"
+              class="cash-btn"
+              th:data-order-id="${order.orderId}">
+        결제완료
+      </button>
+    </td>
+    <td>
+      <button type="button" class="delivery-btn" th:data-order-id="${order.orderId}">
+        배송 상세 보기
       </button>
     </td>
   </tr>
@@ -56,7 +70,7 @@
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ orderId })
+          body: JSON.stringify({orderId})
         });
 
         if (response.ok) {
@@ -68,6 +82,36 @@
         console.error("삭제 중 오류:", error);
         alert("통신 오류 발생");
       }
+    });
+  });
+  document.querySelectorAll(".cash-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+      const orderId = this.dataset.orderId;
+
+      try {
+        const response = await fetch("/api/orders/cash", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({orderId})
+        });
+
+        if (response.ok) {
+          window.location.href = "/orders/list";
+        } else {
+          alert("주문 취소 실패");
+        }
+      } catch (error) {
+        console.error("삭제 중 오류:", error);
+        alert("통신 오류 발생");
+      }
+    });
+  });
+  document.querySelectorAll(".delivery-btn").forEach(button => {
+    button.addEventListener("click", function () {
+      const orderId = this.dataset.orderId;
+      window.location.href = `/deliveries/${orderId}`;
     });
   });
 </script>
