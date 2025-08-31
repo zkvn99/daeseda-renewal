@@ -1,30 +1,33 @@
 package com.experiment.daeseda_renewal.domain.clothes;
 
 import com.experiment.daeseda_renewal.domain.category.Category;
-
-import java.math.BigDecimal;
+import com.experiment.daeseda_renewal.domain.clothes.dto.CreateClothesRequest;
 import java.util.List;
-import java.util.Optional;
 
 public interface ClothesService {
 
-    List<Clothes> getAllClothes();
+  // 리스트 조회
+  List<Clothes> getAllClothes();
 
-    Clothes createClothes(CreateClothesDTO clothesDTO);
+  // 의류 생성
+  Clothes createClothes(CreateClothesRequest clothesDTO);
 
-    CreateClothesDTO getClothesById(Long clothesById);
+  CreateClothesRequest getClothesById(Long clothesById);
 
-    default Clothes convertToEntity(CreateClothesDTO createClothesDTO) {
-        Category categoryEntity = Category.builder()
-                .categoryById(createClothesDTO.getCategoryId())
-                .build();
+  // 의류 삭제
+  int deleteClothes(Long clothesId);
 
-        Clothes clothesEntity = Clothes.builder()
-                .id(createClothesDTO.getClothesId())
-                .name(createClothesDTO.getClothesName())
-                .laundryCost(createClothesDTO.getClothesPrice())
-                .build();
+  default Clothes convertToEntity(CreateClothesRequest createClothesRequest) {
+    Category categoryEntity = Category.builder()
+        .categoryById(createClothesRequest.getCategoryId())
+        .build();
 
-        return clothesEntity;
-    }
+    Clothes clothesEntity = Clothes.builder()
+        .id(createClothesRequest.getClothesId())
+        .name(createClothesRequest.getClothesName())
+        .laundryCost(createClothesRequest.getClothesPrice())
+        .build();
+
+    return clothesEntity;
+  }
 }
