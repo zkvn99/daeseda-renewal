@@ -1,4 +1,4 @@
-    package com.experiment.daeseda_renewal.domain.order;
+    package com.experiment.daeseda_renewal.domain.order.dto;
 
     import com.experiment.daeseda_renewal.constant.OrderStatus;
     import com.experiment.daeseda_renewal.constant.WashingMethod;
@@ -13,7 +13,7 @@
     @Getter
     @Builder
     @AllArgsConstructor
-    public class OrderDto {
+    public class UpdateOrderRequest {
         private Long orderId;
 
         private LocalDateTime regTime;
@@ -29,11 +29,5 @@
         private BigDecimal totalPrice;
 
         private WashingMethod washingMethod;
-
-        //이친구들은 외래키임
-        //일단 연관관계 생략
-        //private Long userId;
-
-        //private Long addressId;
 
     }
